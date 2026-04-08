@@ -1131,6 +1131,9 @@ async function submitCheck() {
       if (regStatus  === 'FAIL') await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Regulator', p.RegSerial || '', checker, 'OPEN', regComment]);
     }
     toast('✓ Truck Check Submitted', 'ok');
+    btn.textContent = '▶ SUBMIT TRUCK CHECK';
+    btn.disabled = true;
+    checkState = {};
     await loadAll();
     showSection('log', document.querySelectorAll('.nav-btn')[4]);
   } catch(e) {
@@ -1565,6 +1568,18 @@ function showSection(id, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   if (btn) btn.classList.add('active');
+
+  // Reset truck check whenever you navigate to it
+  if (id === 'truckcheck') {
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = '▶ SUBMIT TRUCK CHECK';
+    }
+    checkState = {};
+    renderCheckPacks();
+    checkTruckReminder();
+  }
 }
 
 // ── Toast ──────────────────────────────────────────────────────────────────
