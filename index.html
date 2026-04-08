@@ -176,6 +176,23 @@ tbody td {
   font-size: 18px; font-weight: 700; color: var(--accent);
 }
 
+/* ── MASK CARDS ── */
+.mask-card {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.mask-card:last-child { border-bottom: none; }
+.mask-card-top {
+  display: flex; align-items: center;
+  gap: 10px; margin-bottom: 6px;
+}
+.mask-card-meta {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  font-size: 12px; color: var(--dim);
+  font-family: 'Share Tech Mono', monospace;
+}
+.mask-card-meta strong { color: var(--text); }
+
 /* ── PACK CARDS ── */
 .pack-card {
   border-bottom: 1px solid var(--border);
@@ -938,25 +955,24 @@ function renderMasks() {
     return str.replace(re, '<span class="highlight">$1</span>');
   }
 
-  const html = masks.length ? `
-    <table>
-      <thead><tr>
-        <th>Mask Serial</th><th>Model</th><th>Size</th>
-        <th>Assigned To</th><th>Location (Pack)</th><th>Status</th>
-      </tr></thead>
-      <tbody>
-        ${masks.map(m => `
-          <tr>
-            <td class="mono">${hl(m.MaskSerial)}</td>
-            <td>${hl(m.MaskModel)}</td>
-            <td>${hl(m.Size)}</td>
-            <td>${hl(m['Assigned to'] || m.AssignedTo || '—')}</td>
-            <td class="pack-id-cell" style="font-size:15px">${hl(m.PackID)}</td>
-            <td><span class="badge ${m.Status==='OK'?'badge-green':m.Status==='FIT TEST DUE'?'badge-amber':'badge-red'}">${m.Status}</span></td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>`
+  const html = masks.length ? masks.map(m => `
+    <div class="mask-card">
+      <div class="mask-card-top">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600">${hl(m['Assigned to'] || m.AssignedTo || 'Unassigned')}</div>
+          <div class="mono" style="margin-top:2px">${hl(m.MaskSerial)}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <span class="badge ${m.Status==='OK'?'badge-green':m.Status==='FIT TEST DUE'?'badge-amber':'badge-red'}">${m.Status}</span>
+        </div>
+      </div>
+      <div class="mask-card-meta">
+        <span>${hl(m.MaskModel)}</span>
+        <span>Size: <strong>${hl(m.Size)}</strong></span>
+        <span>Pack: <strong class="pack-id-cell" style="font-size:13px">${hl(m.PackID)}</strong></span>
+        ${m.FitTestDue ? `<span>Fit Test: <strong>${m.FitTestDue}</strong></span>` : ''}
+      </div>
+    </div>`).join('')
   : `<div style="padding:32px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted)">No masks match "${query}"</div>`;
 
   document.getElementById('masksBody').innerHTML = html;
