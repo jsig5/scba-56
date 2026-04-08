@@ -265,6 +265,78 @@ tbody td {
 .log-who  { font-size: 12px; color: var(--dim); flex: 1; }
 .log-notes { font-size: 11px; color: var(--amber); }
 
+/* ── DARK / LIGHT MODE ── */
+body.light {
+  --bg:      #f0f2f8;
+  --surface: #ffffff;
+  --card:    #ffffff;
+  --border:  #d0d8ec;
+  --text:    #0f1628;
+  --dim:     #4a5a80;
+  --muted:   #9aaac8;
+}
+body.light .header { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+body.light tbody tr:hover { background: rgba(0,0,0,0.02); }
+body.light .detail-drawer { background: #f8f9fd; }
+
+.theme-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--dim); padding: 5px 10px;
+  border-radius: 4px; cursor: pointer;
+  font-size: 14px; line-height: 1;
+  transition: all 0.2s;
+}
+.theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── TRUCK CHECK REMINDER ── */
+.check-reminder {
+  display: none;
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.35);
+  border-radius: 8px; padding: 12px 16px;
+  margin-bottom: 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px; color: var(--amber);
+  line-height: 1.6;
+}
+.check-reminder.visible { display: block; }
+.check-reminder strong { color: var(--text); }
+
+/* ── OUT OF SERVICE TOGGLE ── */
+.oos-btn {
+  padding: 5px 12px; border-radius: 4px; border: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.oos-btn.in-service  { background: rgba(16,185,129,0.1); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+.oos-btn.out-service { background: rgba(239,68,68,0.15);  color: var(--red);   border: 1px solid rgba(239,68,68,0.3); }
+.oos-btn:hover { opacity: 0.8; }
+
+/* ── REPAIR NOTES ── */
+.repair-notes-section { margin-top: 8px; }
+.repair-notes-list { margin-bottom: 6px; }
+.repair-note-entry {
+  font-size: 12px; color: var(--dim);
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(30,45,82,0.4);
+  font-family: 'Barlow', sans-serif;
+}
+.repair-note-entry span { color: var(--muted); font-family: 'Share Tech Mono', monospace; font-size: 10px; margin-right: 6px; }
+.repair-note-input-row { display: flex; gap: 8px; margin-top: 6px; }
+.repair-note-input {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 6px 10px; border-radius: 4px;
+  font-family: 'Barlow', sans-serif; font-size: 12px; outline: none;
+}
+.repair-note-input:focus { border-color: var(--accent); }
+.repair-note-submit {
+  background: var(--accent); color: #fff; border: none;
+  padding: 6px 14px; border-radius: 4px; cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700;
+  white-space: nowrap;
+}
+
 /* ── FAIL COMMENT ── */
 .fail-comment {
   display: none;
@@ -423,6 +495,7 @@ tbody td {
     <div class="logo">MANOA <span>//</span> SCBA</div>
     <div class="header-right">
       <span id="syncStatus">—</span>
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle light/dark mode">🌙</button>
       <button class="sync-btn" onclick="loadAll()">↻ SYNC</button>
     </div>
   </div>
@@ -494,6 +567,7 @@ tbody td {
 <!-- ── TRUCK CHECK ── -->
 <div id="truckcheck" class="section">
   <div class="apparatus-bar" id="checkFilter"></div>
+  <div class="check-reminder" id="checkReminder"></div>
   <div class="checker-bar">
     <label>CHECKER NAME:</label>
     <input class="checker-input" id="checkerName" placeholder="Enter your name..." />
@@ -572,7 +646,7 @@ function setFilter(section, value) {
   if (section === 'registry')   renderRegistry();
   if (section === 'masks')      renderMasks();
   if (section === 'bottles')    renderBottles();
-  if (section === 'truckcheck') renderCheckPacks();
+  if (section === 'truckcheck') { renderCheckPacks(); checkTruckReminder(); }
   if (section === 'log')        renderLog();
   if (section === 'repairs')    renderRepairs();
 }
@@ -646,6 +720,7 @@ async function loadAll() {
     renderLog();
     renderRepairs();
     updateRepairBadge();
+    checkTruckReminder();
     setSyncStatus('ok');
   } catch(e) {
     setSyncStatus('err');
@@ -682,7 +757,7 @@ function renderRegistry() {
     <table>
       <thead><tr>
         <th>Pack ID</th><th>Apparatus</th><th>Pack Serial</th>
-        <th>Reg Serial</th><th>Next Reg Svc</th><th>Status</th>
+        <th>Reg Serial</th><th>Next Reg Svc</th><th>Status</th><th>Action</th>
       </tr></thead>
       <tbody>
         ${packs.map(p => `
@@ -692,7 +767,15 @@ function renderRegistry() {
             <td class="mono">${p['PackSerial#'] || p.PackSerial || ''}</td>
             <td class="mono">${p.RegSerial}</td>
             <td class="mono">${p.RegNextService}</td>
-            <td><span class="badge ${p.Status==='IN SERVICE'?'badge-green':'badge-red'}">${p.Status}</span></td>
+            <td>
+              <span class="badge ${p.Status==='IN SERVICE'?'badge-green':'badge-red'}">${p.Status}</span>
+            </td>
+            <td onclick="event.stopPropagation()">
+              <button class="oos-btn ${p.Status==='IN SERVICE'?'in-service':'out-service'}"
+                onclick="toggleOOS('${p.PackID}','${p.Status}')">
+                ${p.Status==='IN SERVICE'?'⬇ OUT OF SVC':'⬆ RESTORE'}
+              </button>
+            </td>
           </tr>
           <tr id="detail-${p.PackID}"><td colspan="6" style="padding:0">
             <div class="detail-drawer" id="drawer-${p.PackID}">
@@ -1054,6 +1137,10 @@ function renderRepairs() {
   } else {
     document.getElementById('repairsOpenBody').innerHTML = open.map((r, i) => {
       const globalIdx = DB.repairs.indexOf(r);
+      const notesList = r.UpdateNotes ? r.UpdateNotes.split('||').map(n => {
+        const [ts, ...rest] = n.split('|');
+        return `<div class="repair-note-entry"><span>${ts}</span>${rest.join('|')}</div>`;
+      }).join('') : '';
       return `
         <div class="repair-item">
           <div class="repair-item-left">
@@ -1064,6 +1151,13 @@ function renderRepairs() {
             <div class="repair-apparatus">${r.Apparatus}</div>
             <div class="repair-meta">Serial: ${r.Serial || '—'} · Flagged by ${r.Checker} · ${r.Timestamp}</div>
             ${r.Notes ? `<div style="font-size:11px;color:var(--amber);margin-top:4px">${r.Notes}</div>` : ''}
+            <div class="repair-notes-section">
+              ${notesList ? `<div class="repair-notes-list">${notesList}</div>` : ''}
+              <div class="repair-note-input-row">
+                <input class="repair-note-input" id="noteInput-${globalIdx}" placeholder="Add update note..." />
+                <button class="repair-note-submit" onclick="addRepairNote(${globalIdx})">+ NOTE</button>
+              </div>
+            </div>
           </div>
           <button class="resolve-btn" onclick="resolveItem(${globalIdx})">✓ RESOLVE</button>
         </div>`;
@@ -1125,6 +1219,78 @@ function updateRepairBadge() {
   }
 }
 
+// ── Dark / Light Mode ──────────────────────────────────────────────────────
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  document.getElementById('themeBtn').textContent = isLight ? '🌑' : '🌙';
+  localStorage.setItem('scba_theme', isLight ? 'light' : 'dark');
+}
+
+// ── Out of Service Toggle ──────────────────────────────────────────────────
+async function toggleOOS(packId, currentStatus) {
+  const newStatus = currentStatus === 'IN SERVICE' ? 'OUT OF SERVICE' : 'IN SERVICE';
+  const pack = DB.packs.find(p => p.PackID === packId);
+  if (!pack) return;
+  const rowIndex = DB.packs.indexOf(pack);
+  const sheetRow = rowIndex + 2;
+  try {
+    // Status is column K (11) in Packs tab
+    await updateCell(`Packs!K${sheetRow}`, newStatus);
+    toast(`${packId} → ${newStatus}`, newStatus === 'IN SERVICE' ? 'ok' : 'err');
+    await loadAll();
+  } catch(e) {
+    toast('Failed to update: ' + e.message, 'err');
+  }
+}
+
+// ── Truck Check Reminder ───────────────────────────────────────────────────
+function checkTruckReminder() {
+  const reminder = document.getElementById('checkReminder');
+  if (!reminder) return;
+  const apparatus = filters.truckcheck;
+  if (!apparatus) { reminder.classList.remove('visible'); return; }
+
+  const now = new Date();
+  const cutoff = new Date(now - 24 * 60 * 60 * 1000); // 24 hours ago
+
+  const recentLogs = DB.log.filter(l =>
+    l.Apparatus === apparatus &&
+    new Date(l.Timestamp) > cutoff
+  );
+
+  if (recentLogs.length === 0) {
+    reminder.classList.add('visible');
+    reminder.innerHTML = `⚠ <strong>${apparatus}</strong> has not had a truck check logged in the last 24 hours.`;
+  } else {
+    reminder.classList.remove('visible');
+  }
+}
+
+// ── Add Repair Note ────────────────────────────────────────────────────────
+async function addRepairNote(rowIndex) {
+  const input = document.getElementById('noteInput-' + rowIndex);
+  const note  = input?.value.trim();
+  if (!note) return;
+
+  const ts = new Date().toLocaleString('en-US',{
+    month:'2-digit', day:'2-digit', year:'2-digit',
+    hour:'2-digit', minute:'2-digit', hour12: false
+  });
+
+  const sheetRow = rowIndex + 2;
+  const existing = DB.repairs[rowIndex]?.UpdateNotes || '';
+  const updated  = existing ? existing + '||' + ts + '|' + note : ts + '|' + note;
+
+  try {
+    // UpdateNotes is column I (9) in RepairLog
+    await updateCell(`RepairLog!I${sheetRow}`, updated);
+    toast('✓ Note added', 'ok');
+    await loadAll();
+  } catch(e) {
+    toast('Failed to add note: ' + e.message, 'err');
+  }
+}
+
 // ── Search helpers ─────────────────────────────────────────────────────────
 function clearSearch(inputId, clearId) {
   const input = document.getElementById(inputId);
@@ -1152,13 +1318,10 @@ function toast(msg, type='ok') {
 
 // ── Init ───────────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
-  if (API_KEY === 'PASTE_YOUR_API_KEY_HERE') {
-    document.getElementById('registryBody').innerHTML = `
-      <div style="padding:40px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--amber);line-height:2">
-        ⚠ API KEY NOT SET<br>
-        <span style="color:var(--dim);font-size:11px">Open SCBA_App.html in a text editor<br>and replace PASTE_YOUR_API_KEY_HERE with your Google API key</span>
-      </div>`;
-    return;
+  // Restore theme
+  if (localStorage.getItem('scba_theme') === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('themeBtn').textContent = '🌑';
   }
   ['registry','masks','bottles','truckcheck','log','repairs'].forEach(s =>
     buildFilterBar(s+'Filter', s)
