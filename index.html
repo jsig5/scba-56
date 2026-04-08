@@ -197,6 +197,7 @@ tbody td {
   border-bottom: 1px solid var(--border);
 }
 .check-items { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+.check-item-wrap { display: flex; flex-direction: column; }
 .check-item {
   display: flex; align-items: center; gap: 12px;
   padding: 10px 14px;
@@ -249,6 +250,39 @@ tbody td {
 .log-row { display: flex; align-items: center; gap: 14px; padding: 11px 16px; border-bottom: 1px solid rgba(33,38,47,0.5); font-size: 13px; }
 .log-time { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); min-width: 130px; }
 .log-pack { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; color: var(--accent); min-width: 55px; }
+
+/* ── FAIL COMMENT ── */
+.fail-comment {
+  display: none;
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: rgba(239,68,68,0.06);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 6px;
+  animation: fadeIn 0.2s ease;
+}
+.fail-comment.visible { display: block; }
+.fail-comment-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--red);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 5px; display: block;
+}
+.fail-comment-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: var(--text);
+  padding: 7px 10px;
+  border-radius: 4px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 13px;
+  outline: none;
+  resize: none;
+}
+.fail-comment-input:focus { border-color: var(--red); }
+.fail-comment-input::placeholder { color: var(--muted); }
+@keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
 
 /* ── REPAIR ITEMS ── */
 .repair-item {
@@ -370,7 +404,7 @@ tbody td {
 
 <!-- ── HEADER ── -->
 <div class="header">
-  <div class="logo">MANOA <span>//</span> S56</div>
+  <div class="logo">MANOA <span>//</span> SCBA</div>
   <nav class="nav">
     <button class="nav-btn active" onclick="showSection('registry',this)">Registry</button>
     <button class="nav-btn" onclick="showSection('masks',this)">Masks</button>
@@ -493,7 +527,7 @@ tbody td {
 
 <script>
 // ── CONFIG — paste your values here once, then share the file ─────────────
-const API_KEY  = 'PASTE_YOUR_API_KEY_HERE';
+const API_KEY  = 'AIzaSyCvMTI3fKnnY_SEanKOV06a_RDOx5jkqRk';
 const SHEET_ID = '11joexsJGkijm9r_p-tGI3OOu7W_Lb-ymeYi2HSKOsh4';
 
 // ── State ──────────────────────────────────────────────────────────────────
@@ -536,7 +570,7 @@ function matchesFilter(section, apparatusStr) {
 
 // ── Init ───────────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
-  if (API_KEY === 'PASTE_YOUR_API_KEY_HERE') {
+  if (API_KEY === 'AIzaSyCvMTI3fKnnY_SEanKOV06a_RDOx5jkqRk') {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById('registry').classList.add('active');
     document.getElementById('registryBody').innerHTML = `
@@ -851,13 +885,19 @@ function renderCheckPacks() {
 function checkRow(packId, type, name, serial) {
   const key = packId + '_' + type;
   return `
-    <div class="check-item">
-      <div class="check-item-info">
-        <div class="check-item-name">${name}</div>
-        <div class="check-item-serial">${serial}</div>
+    <div class="check-item-wrap" id="wrap-${key}">
+      <div class="check-item">
+        <div class="check-item-info">
+          <div class="check-item-name">${name}</div>
+          <div class="check-item-serial">${serial}</div>
+        </div>
+        <button class="chk-btn chk-pass" id="pass-${key}" onclick="setCheck('${packId}','${key}','pass')">✓ PASS</button>
+        <button class="chk-btn chk-fail" id="fail-${key}" onclick="setCheck('${packId}','${key}','fail')">✗ FAIL</button>
       </div>
-      <button class="chk-btn chk-pass" id="pass-${key}" onclick="setCheck('${packId}','${key}','pass')">✓ PASS</button>
-      <button class="chk-btn chk-fail" id="fail-${key}" onclick="setCheck('${packId}','${key}','fail')">✗ FAIL</button>
+      <div class="fail-comment" id="comment-${key}">
+        <label class="fail-comment-label">⚠ Reason for failure</label>
+        <textarea class="fail-comment-input" id="commentText-${key}" rows="2" placeholder="Describe the issue..."></textarea>
+      </div>
     </div>`;
 }
 
@@ -865,6 +905,19 @@ function setCheck(packId, key, val) {
   checkState[key] = val;
   document.getElementById('pass-' + key).classList.toggle('on', val === 'pass');
   document.getElementById('fail-' + key).classList.toggle('on', val === 'fail');
+
+  // Show/hide comment field
+  const commentBox = document.getElementById('comment-' + key);
+  if (commentBox) {
+    if (val === 'fail') {
+      commentBox.classList.add('visible');
+      document.getElementById('commentText-' + key)?.focus();
+    } else {
+      commentBox.classList.remove('visible');
+      const txt = document.getElementById('commentText-' + key);
+      if (txt) txt.value = '';
+    }
+  }
 
   // Update pack badge
   const packKeys = ['pack','mask','reg'].map(t => packId + '_' + t);
@@ -901,20 +954,28 @@ async function submitCheck() {
       const packStatus = checkState[p.PackID+'_pack'] === 'pass' ? 'PASS' : 'FAIL';
       const maskStatus = checkState[p.PackID+'_mask'] === 'pass' ? 'PASS' : 'FAIL';
       const regStatus  = checkState[p.PackID+'_reg']  === 'pass' ? 'PASS' : 'FAIL';
-      const notes = [
-        packStatus==='FAIL'?'Pack FAIL':'',
-        maskStatus==='FAIL'?'Mask FAIL':'',
-        regStatus ==='FAIL'?'Reg FAIL':''
-      ].filter(Boolean).join('; ');
+
+      // Grab comments for failed items
+      const packComment = packStatus === 'FAIL' ? (document.getElementById('commentText-'+p.PackID+'_pack')?.value.trim() || '') : '';
+      const maskComment = maskStatus === 'FAIL' ? (document.getElementById('commentText-'+p.PackID+'_mask')?.value.trim() || '') : '';
+      const regComment  = regStatus  === 'FAIL' ? (document.getElementById('commentText-'+p.PackID+'_reg')?.value.trim()  || '') : '';
+
+      const notesParts = [
+        packStatus==='FAIL' ? ('Pack FAIL' + (packComment ? ': ' + packComment : '')) : '',
+        maskStatus==='FAIL' ? ('Mask FAIL' + (maskComment ? ': ' + maskComment : '')) : '',
+        regStatus ==='FAIL' ? ('Reg FAIL'  + (regComment  ? ': ' + regComment  : '')) : '',
+      ].filter(Boolean);
+      const notes = notesParts.join('; ');
+
       await appendRow('CheckLog', [ts, p.Apparatus, checker, p.PackID, packStatus, maskStatus, regStatus, notes]);
 
-      // Auto-log each failed item to RepairLog
-      if (packStatus === 'FAIL') await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Pack', p['PackSerial#'] || p.PackSerial || '', checker, 'OPEN', '']);
+      // Auto-log each failed item to RepairLog with comment
+      if (packStatus === 'FAIL') await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Pack',      p['PackSerial#'] || p.PackSerial || '', checker, 'OPEN', packComment]);
       if (maskStatus === 'FAIL') {
         const mask = DB.masks.find(m => m.PackID === p.PackID);
-        await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Mask', mask ? mask.MaskSerial : '', checker, 'OPEN', '']);
+        await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Mask',      mask ? mask.MaskSerial : '', checker, 'OPEN', maskComment]);
       }
-      if (regStatus === 'FAIL') await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Regulator', p.RegSerial || '', checker, 'OPEN', '']);
+      if (regStatus  === 'FAIL') await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Regulator', p.RegSerial || '',                     checker, 'OPEN', regComment]);
     }
     toast('✓ Truck Check Submitted', 'ok');
     await loadAll();
@@ -1083,7 +1144,7 @@ function toast(msg, type='ok') {
 
 // ── Init ───────────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
-  if (API_KEY === 'PASTE_YOUR_API_KEY_HERE') {
+  if (API_KEY === 'AIzaSyCvMTI3fKnnY_SEanKOV06a_RDOx5jkqRk') {
     document.getElementById('registryBody').innerHTML = `
       <div style="padding:40px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--amber);line-height:2">
         ⚠ API KEY NOT SET<br>
