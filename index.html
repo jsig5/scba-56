@@ -174,6 +174,21 @@ tbody td {
   font-size: 18px; font-weight: 700; color: var(--accent);
 }
 
+/* ── PACK CARDS ── */
+.pack-card {
+  border-bottom: 1px solid var(--border);
+}
+.pack-card:last-child { border-bottom: none; }
+.pack-card-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background 0.1s;
+  gap: 12px;
+}
+.pack-card-header:hover { background: rgba(255,255,255,0.02); }
+
 /* ── PACK DETAIL ── */
 .detail-drawer {
   background: var(--bg);
@@ -181,7 +196,14 @@ tbody td {
   padding: 20px;
   display: none;
 }
-.detail-drawer.open { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.detail-drawer.open {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+}
+@media (max-width: 640px) {
+  .detail-drawer.open { grid-template-columns: 1fr 1fr; }
+}
 .detail-group h4 {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px; color: var(--accent);
@@ -788,13 +810,17 @@ function setSyncStatus(state) {
 }
 
 // ── Registry ───────────────────────────────────────────────────────────────
+function isInService(status) {
+  return (status || '').trim().toUpperCase() === 'IN SERVICE';
+}
+
 function renderRegistry() {
   const packs = DB.packs.filter(p => matchesFilter('registry', p.Apparatus));
   const allBottles = DB.bottles.filter(b => matchesFilter('registry', b.Apparatus));
 
   document.getElementById('statTotal').textContent = packs.length;
-  document.getElementById('statOk').textContent    = packs.filter(p => p.Status === 'IN SERVICE').length;
-  document.getElementById('statIssue').textContent = packs.filter(p => p.Status !== 'IN SERVICE').length;
+  document.getElementById('statOk').textContent    = packs.filter(p => isInService(p.Status)).length;
+  document.getElementById('statIssue').textContent = packs.filter(p => !isInService(p.Status)).length;
 
   const now = new Date();
   const soon = new Date(); soon.setMonth(soon.getMonth() + 6);
@@ -804,64 +830,59 @@ function renderRegistry() {
   }).length;
   document.getElementById('statHydro').textContent = hydroDue;
 
-  const html = `
-    <table>
-      <thead><tr>
-        <th>Pack ID</th><th>Apparatus</th><th>Pack Serial</th>
-        <th>Reg Serial</th><th>Next Reg Svc</th><th>Status</th><th>Action</th>
-      </tr></thead>
-      <tbody>
-        ${packs.map(p => `
-          <tr onclick="toggleDetail('${p.PackID}')" style="cursor:pointer">
-            <td class="pack-id-cell">${p.PackID}</td>
-            <td>${p.Apparatus}</td>
-            <td class="mono">${p['PackSerial#'] || p.PackSerial || ''}</td>
-            <td class="mono">${p.RegSerial}</td>
-            <td class="mono">${p.RegNextService}</td>
-            <td>
-              <span class="badge ${p.Status==='IN SERVICE'?'badge-green':'badge-red'}">${p.Status}</span>
-            </td>
-            <td onclick="event.stopPropagation()">
-              <button class="oos-btn ${p.Status==='IN SERVICE'?'in-service':'out-service'}"
-                onclick="toggleOOS('${p.PackID}','${p.Status}')">
-                ${p.Status==='IN SERVICE'?'⬇ OUT OF SVC':'⬆ RESTORE'}
-              </button>
-            </td>
-          </tr>
-          <tr id="detail-${p.PackID}"><td colspan="6" style="padding:0">
-            <div class="detail-drawer" id="drawer-${p.PackID}">
-              <div class="detail-group">
-                <h4>Pack / Cylinder</h4>
-                <div class="detail-row"><span>Serial #</span><span>${p['PackSerial#'] || p.PackSerial || '—'}</span></div>
-                <div class="detail-row"><span>Model</span><span>${p.PaclModel || p.PackModel || '—'}</span></div>
-                <div class="detail-row"><span>Mfg Date</span><span>${p.MfgDate || '—'}</span></div>
-              </div>
-              <div class="detail-group">
-                <h4>Regulator</h4>
-                <div class="detail-row"><span>Serial #</span><span>${p.RegSerial || '—'}</span></div>
-                <div class="detail-row"><span>Model</span><span>${p.Remodel || p.RegModel || '—'}</span></div>
-                <div class="detail-row"><span>Last Service</span><span>${p.RegLastService || '—'}</span></div>
-                <div class="detail-row"><span>Next Service</span><span>${p.RegNextService || '—'}</span></div>
-              </div>
-              <div class="detail-group">
-                <h4>Assigned Mask</h4>
-                ${(() => {
-                  const m = DB.masks.find(x => x.PackID === p.PackID);
-                  return m ? `
-                    <div class="detail-row"><span>Serial #</span><span>${m.MaskSerial}</span></div>
-                    <div class="detail-row"><span>Model</span><span>${m.MaskModel}</span></div>
-                    <div class="detail-row"><span>Size</span><span>${m.Size}</span></div>
-                    <div class="detail-row"><span>Assigned To</span><span>${m['Assigned to'] || m.AssignedTo || '—'}</span></div>
-                    <div class="detail-row"><span>Status</span><span>${m.Status}</span></div>
-                  ` : '<div class="detail-row"><span>No mask assigned</span></div>';
-                })()}
-              </div>
+  const html = packs.map(p => {
+    const inSvc = isInService(p.Status);
+    const mask  = DB.masks.find(x => x.PackID === p.PackID);
+    return `
+      <div class="pack-card" id="packcard-${p.PackID}">
+        <div class="pack-card-header" onclick="toggleDetail('${p.PackID}')">
+          <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+            <div class="pack-id-cell">${p.PackID}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.Apparatus}</div>
+              <div class="mono" style="margin-top:2px">${p['PackSerial#'] || p.PackSerial || '—'}</div>
             </div>
-          </td></tr>
-        `).join('')}
-      </tbody>
-    </table>`;
-  document.getElementById('registryBody').innerHTML = html;
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+            <span class="badge ${inSvc ? 'badge-green' : 'badge-red'}">${p.Status.trim()}</span>
+            <span style="color:var(--dim);font-size:14px">▾</span>
+          </div>
+        </div>
+        <div class="detail-drawer" id="drawer-${p.PackID}">
+          <div class="detail-group">
+            <h4>Pack / Cylinder</h4>
+            <div class="detail-row"><span>Serial #</span><span>${p['PackSerial#'] || p.PackSerial || '—'}</span></div>
+            <div class="detail-row"><span>Model</span><span>${p.PaclModel || p.PackModel || '—'}</span></div>
+            <div class="detail-row"><span>Mfg Date</span><span>${p.MfgDate || '—'}</span></div>
+          </div>
+          <div class="detail-group">
+            <h4>Regulator</h4>
+            <div class="detail-row"><span>Serial #</span><span>${p.RegSerial || '—'}</span></div>
+            <div class="detail-row"><span>Model</span><span>${p.Remodel || p.RegModel || '—'}</span></div>
+            <div class="detail-row"><span>Last Service</span><span>${p.RegLastService || '—'}</span></div>
+            <div class="detail-row"><span>Next Service</span><span>${p.RegNextService || '—'}</span></div>
+          </div>
+          <div class="detail-group">
+            <h4>Assigned Mask</h4>
+            ${mask ? `
+              <div class="detail-row"><span>Serial #</span><span>${mask.MaskSerial}</span></div>
+              <div class="detail-row"><span>Model</span><span>${mask.MaskModel}</span></div>
+              <div class="detail-row"><span>Size</span><span>${mask.Size}</span></div>
+              <div class="detail-row"><span>Assigned To</span><span>${mask['Assigned to'] || mask.AssignedTo || '—'}</span></div>
+              <div class="detail-row"><span>Fit Test Due</span><span>${mask.FitTestDue || '—'}</span></div>
+            ` : '<div class="detail-row"><span>No mask assigned</span></div>'}
+          </div>
+          <div class="detail-group" style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:12px;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="oos-btn ${inSvc ? 'in-service' : 'out-service'}"
+              onclick="toggleOOS('${p.PackID}','${p.Status}')">
+              ${inSvc ? '⬇ MARK OUT OF SERVICE' : '⬆ RESTORE TO SERVICE'}
+            </button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('registryBody').innerHTML = html || '<div class="loading">No packs found.</div>';
 }
 
 function toggleDetail(packId) {
@@ -1282,15 +1303,14 @@ function toggleTheme() {
 
 // ── Out of Service Toggle ──────────────────────────────────────────────────
 async function toggleOOS(packId, currentStatus) {
-  const newStatus = currentStatus === 'IN SERVICE' ? 'OUT OF SERVICE' : 'IN SERVICE';
+  const newStatus = isInService(currentStatus) ? 'OUT OF SERVICE' : 'IN SERVICE';
   const pack = DB.packs.find(p => p.PackID === packId);
   if (!pack) return;
   const rowIndex = DB.packs.indexOf(pack);
   const sheetRow = rowIndex + 2;
   try {
-    // Status is column K (11) in Packs tab
     await updateCell(`Packs!K${sheetRow}`, newStatus);
-    toast(`${packId} → ${newStatus}`, newStatus === 'IN SERVICE' ? 'ok' : 'err');
+    toast(`${packId} → ${newStatus}`, isInService(newStatus) ? 'ok' : 'err');
     await loadAll();
   } catch(e) {
     toast('Failed to update: ' + e.message, 'err');
