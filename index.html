@@ -606,21 +606,21 @@ async function fetchTab(tab) {
 }
 
 async function appendRow(tab, values) {
-  const params = new URLSearchParams();
-  params.append('action', 'append');
-  params.append('tab', tab);
-  params.append('values', JSON.stringify(values));
-  await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: params });
-  // no-cors returns opaque response — we assume success and reload to confirm
+  const url = `${SCRIPT_URL}?action=append&tab=${encodeURIComponent(tab)}&values=${encodeURIComponent(JSON.stringify(values))}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  if (data.status === 'error') throw new Error(data.message);
+  return data;
 }
 
 async function updateCell(range, value) {
-  const params = new URLSearchParams();
-  params.append('action', 'updateCell');
-  params.append('tab', range.split('!')[0]);
-  params.append('range', range);
-  params.append('value', value);
-  await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: params });
+  const tab   = range.split('!')[0];
+  const cell  = range.split('!')[1];
+  const url = `${SCRIPT_URL}?action=updateCell&tab=${encodeURIComponent(tab)}&range=${encodeURIComponent(cell)}&value=${encodeURIComponent(value)}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  if (data.status === 'error') throw new Error(data.message);
+  return data;
 }
 
 // ── Load All ───────────────────────────────────────────────────────────────
