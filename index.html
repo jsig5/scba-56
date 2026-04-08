@@ -131,6 +131,8 @@ body {
   border-radius: 8px; overflow: hidden;
   margin-bottom: 20px;
 }
+/* Registry uses card-based rows that need to expand */
+#registryBody { overflow: visible; }
 .card-head {
   display: flex; align-items: center;
   justify-content: space-between;
@@ -188,6 +190,8 @@ tbody td {
   gap: 12px;
 }
 .pack-card-header:hover { background: rgba(255,255,255,0.02); }
+/* Registry card needs visible overflow for expand/collapse */
+#registry .card { overflow: visible; border-radius: 8px; }
 
 /* ── PACK DETAIL ── */
 .detail-drawer {
@@ -839,8 +843,8 @@ function renderRegistry() {
           <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
             <div class="pack-id-cell">${p.PackID}</div>
             <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.Apparatus}</div>
-              <div class="mono" style="margin-top:2px">${p['PackSerial#'] || p.PackSerial || '—'}</div>
+              <div style="font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.Apparatus}</div>
+              <div class="mono" style="margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p['PackSerial#'] || p.PackSerial || '—'}</div>
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
