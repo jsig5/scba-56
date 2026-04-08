@@ -1,86 +1,86 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SCBA Accountability — Station 56</title>
+<title>SCBA Accountability — Manoa Fire Company</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&family=Share+Tech+Mono&display=swap');
 
 :root {
-–bg: #0b0c0f;
-–surface: #111318;
-–card: #16191f;
-–border: #21262f;
-–accent: #e84c0a;
-–amber: #f59e0b;
-–green: #10b981;
-–red: #ef4444;
-–blue: #3b82f6;
-–text: #e8eaf0;
-–dim: #8892a0;
-–muted: #454d5a;
+  --bg:      #0a0e1a;
+  --surface: #0f1628;
+  --card:    #141c32;
+  --border:  #1e2d52;
+  --accent:  #cc1f1f;
+  --accent2: #e02020;
+  --amber:   #f59e0b;
+  --green:   #10b981;
+  --red:     #ef4444;
+  --blue:    #3b82f6;
+  --text:    #f0f2f8;
+  --dim:     #7e8fb5;
+  --muted:   #3a4a70;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-background: var(–bg);
-color: var(–text);
-font-family: ‘Barlow’, sans-serif;
-min-height: 100vh;
-font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  min-height: 100vh;
+  font-size: 14px;
 }
 
 /* ── HEADER ── */
 .header {
-background: var(–surface);
-border-bottom: 2px solid var(–accent);
-padding: 0 24px;
-display: flex; align-items: center;
-gap: 0; height: 56px;
-position: sticky; top: 0; z-index: 100;
+  background: var(--surface);
+  border-bottom: 2px solid var(--accent);
+  padding: 0 24px;
+  display: flex; align-items: center;
+  gap: 0; height: 56px;
+  position: sticky; top: 0; z-index: 100;
 }
 .logo {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 22px; font-weight: 800;
-letter-spacing: 3px; text-transform: uppercase;
-color: var(–text);
-margin-right: 32px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 800;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text);
+  margin-right: 32px;
 }
-.logo span { color: var(–accent); }
+.logo span { color: var(--accent); }
 .nav { display: flex; height: 100%; gap: 0; }
 .nav-btn {
-background: none; border: none;
-color: var(–dim);
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 14px; font-weight: 600;
-letter-spacing: 1.5px; text-transform: uppercase;
-padding: 0 18px; cursor: pointer;
-border-bottom: 3px solid transparent;
-border-top: 3px solid transparent;
-transition: all 0.15s;
-white-space: nowrap;
+  background: none; border: none;
+  color: var(--dim);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 0 18px; cursor: pointer;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid transparent;
+  transition: all 0.15s;
+  white-space: nowrap;
 }
-.nav-btn:hover { color: var(–text); }
-.nav-btn.active { color: var(–accent); border-bottom-color: var(–accent); }
+.nav-btn:hover { color: var(--text); }
+.nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 .header-right {
-margin-left: auto;
-display: flex; align-items: center; gap: 12px;
+  margin-left: auto;
+  display: flex; align-items: center; gap: 12px;
 }
 .sync-btn {
-background: none; border: 1px solid var(–border);
-color: var(–dim); padding: 6px 14px;
-border-radius: 4px; cursor: pointer;
-font-family: ‘Share Tech Mono’, monospace;
-font-size: 11px; letter-spacing: 1px;
-transition: all 0.2s;
+  background: none; border: 1px solid var(--border);
+  color: var(--dim); padding: 6px 14px;
+  border-radius: 4px; cursor: pointer;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px; letter-spacing: 1px;
+  transition: all 0.2s;
 }
-.sync-btn:hover { border-color: var(–accent); color: var(–accent); }
+.sync-btn:hover { border-color: var(--accent); color: var(--accent); }
 #syncStatus {
-font-family: ‘Share Tech Mono’, monospace;
-font-size: 11px; color: var(–muted);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px; color: var(--muted);
 }
 
 /* ── MAIN ── */
@@ -90,348 +90,401 @@ font-size: 11px; color: var(–muted);
 
 /* ── STAT BAR ── */
 .stat-bar {
-display: grid; grid-template-columns: repeat(4, 1fr);
-gap: 12px; margin-bottom: 24px;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 24px;
 }
 .stat {
-background: var(–card);
-border: 1px solid var(–border);
-border-radius: 8px; padding: 16px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px 20px;
 }
 .stat-num {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 36px; font-weight: 800; line-height: 1;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 36px; font-weight: 800; line-height: 1;
 }
-.stat-num.accent { color: var(–accent); }
-.stat-num.green { color: var(–green); }
-.stat-num.red { color: var(–red); }
-.stat-num.amber { color: var(–amber); }
+.stat-num.accent { color: var(--accent); }
+.stat-num.green  { color: var(--green); }
+.stat-num.red    { color: var(--red); }
+.stat-num.amber  { color: var(--amber); }
 .stat-label {
-font-family: ‘Share Tech Mono’, monospace;
-font-size: 10px; color: var(–dim);
-text-transform: uppercase; letter-spacing: 1px;
-margin-top: 4px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--dim);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-top: 4px;
 }
 
 /* ── TABLES ── */
 .card {
-background: var(–card);
-border: 1px solid var(–border);
-border-radius: 8px; overflow: hidden;
-margin-bottom: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+  margin-bottom: 20px;
 }
 .card-head {
-display: flex; align-items: center;
-justify-content: space-between;
-padding: 14px 20px;
-border-bottom: 1px solid var(–border);
-background: var(–surface);
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
 }
 .card-title {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 16px; font-weight: 700;
-letter-spacing: 1.5px; text-transform: uppercase;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
 }
 .badge {
-font-family: ‘Share Tech Mono’, monospace;
-font-size: 10px; padding: 3px 10px;
-border-radius: 3px; letter-spacing: 0.5px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; padding: 3px 10px;
+  border-radius: 3px; letter-spacing: 0.5px;
 }
-.badge-green { background: rgba(16,185,129,0.12); color: var(–green); border: 1px solid rgba(16,185,129,0.25); }
-.badge-red { background: rgba(239,68,68,0.12); color: var(–red); border: 1px solid rgba(239,68,68,0.25); }
-.badge-amber { background: rgba(245,158,11,0.12); color: var(–amber); border: 1px solid rgba(245,158,11,0.25); }
-.badge-blue { background: rgba(59,130,246,0.12); color: var(–blue); border: 1px solid rgba(59,130,246,0.25); }
+.badge-green { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
+.badge-red   { background: rgba(239,68,68,0.12);  color: var(--red);   border: 1px solid rgba(239,68,68,0.25); }
+.badge-amber { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.25); }
+.badge-blue  { background: rgba(59,130,246,0.12); color: var(--blue);  border: 1px solid rgba(59,130,246,0.25); }
 
 table { width: 100%; border-collapse: collapse; }
 thead th {
-font-family: ‘Share Tech Mono’, monospace;
-font-size: 10px; text-transform: uppercase;
-letter-spacing: 1px; color: var(–dim);
-text-align: left; padding: 10px 16px;
-border-bottom: 1px solid var(–border);
-background: var(–surface);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--dim);
+  text-align: left; padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
 }
 tbody tr { border-bottom: 1px solid rgba(33,38,47,0.6); transition: background 0.1s; }
 tbody tr:hover { background: rgba(255,255,255,0.02); }
 tbody td {
-padding: 11px 16px; font-size: 13px;
-vertical-align: middle;
+  padding: 11px 16px; font-size: 13px;
+  vertical-align: middle;
 }
-.mono { font-family: ‘Share Tech Mono’, monospace; font-size: 11px; color: var(–dim); }
+.mono { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); }
 .pack-id-cell {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 18px; font-weight: 700; color: var(–accent);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--accent);
 }
 
 /* ── PACK DETAIL ── */
 .detail-drawer {
-background: var(–bg);
-border-top: 1px solid var(–border);
-padding: 20px;
-display: none;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  display: none;
 }
 .detail-drawer.open { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
 .detail-group h4 {
-font-family: ‘Share Tech Mono’, monospace;
-font-size: 10px; color: var(–accent);
-text-transform: uppercase; letter-spacing: 2px;
-margin-bottom: 10px;
-border-bottom: 1px solid var(–border);
-padding-bottom: 4px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--accent);
+  text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
 }
 .detail-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.detail-row span:first-child { font-size: 11px; color: var(–dim); }
-.detail-row span:last-child { font-family: ‘Share Tech Mono’, monospace; font-size: 11px; }
+.detail-row span:first-child { font-size: 11px; color: var(--dim); }
+.detail-row span:last-child { font-family: 'Share Tech Mono', monospace; font-size: 11px; }
 
 /* ── TRUCK CHECK ── */
 .check-pack {
-background: var(–card);
-border: 1px solid var(–border);
-border-radius: 8px; margin-bottom: 14px;
-overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px; margin-bottom: 14px;
+  overflow: hidden;
 }
 .check-pack-hdr {
-display: flex; align-items: center; gap: 14px;
-padding: 14px 18px;
-background: var(–surface);
-border-bottom: 1px solid var(–border);
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 .check-items { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
 .check-item {
-display: flex; align-items: center; gap: 12px;
-padding: 10px 14px;
-background: var(–bg);
-border: 1px solid var(–border);
-border-radius: 6px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
 }
 .check-item-info { flex: 1; }
 .check-item-name { font-size: 13px; font-weight: 500; }
-.check-item-serial { font-family: ‘Share Tech Mono’, monospace; font-size: 10px; color: var(–dim); margin-top: 2px; }
+.check-item-serial { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); margin-top: 2px; }
 .chk-btn {
-padding: 6px 16px; border-radius: 4px; border: none;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 13px; font-weight: 700;
-letter-spacing: 1px; cursor: pointer; transition: all 0.15s;
+  padding: 6px 16px; border-radius: 4px; border: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 1px; cursor: pointer; transition: all 0.15s;
 }
-.chk-pass { background: rgba(16,185,129,0.1); color: var(–green); border: 1px solid rgba(16,185,129,0.25); }
-.chk-pass.on, .chk-pass:hover { background: var(–green); color: #000; }
-.chk-fail { background: rgba(239,68,68,0.1); color: var(–red); border: 1px solid rgba(239,68,68,0.2); }
-.chk-fail.on, .chk-fail:hover { background: var(–red); color: #fff; }
+.chk-pass { background: rgba(16,185,129,0.1); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
+.chk-pass.on, .chk-pass:hover { background: var(--green); color: #000; }
+.chk-fail { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+.chk-fail.on, .chk-fail:hover { background: var(--red); color: #fff; }
 
 .checker-bar {
-background: var(–card); border: 1px solid var(–border);
-border-radius: 8px; padding: 16px 20px;
-display: flex; align-items: center; gap: 16px;
-margin-bottom: 16px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px 20px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 16px;
 }
-.checker-bar label { font-family: ‘Share Tech Mono’, monospace; font-size: 11px; color: var(–dim); white-space: nowrap; }
+.checker-bar label { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); white-space: nowrap; }
 .checker-input {
-background: var(–bg); border: 1px solid var(–border);
-color: var(–text); padding: 8px 14px;
-border-radius: 5px; font-family: ‘Barlow’, sans-serif;
-font-size: 13px; flex: 1; outline: none;
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 8px 14px;
+  border-radius: 5px; font-family: 'Barlow', sans-serif;
+  font-size: 13px; flex: 1; outline: none;
 }
-.checker-input:focus { border-color: var(–accent); }
+.checker-input:focus { border-color: var(--accent); }
 
 .submit-check {
-background: var(–accent); color: #fff; border: none;
-padding: 14px; width: 100%;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 18px; font-weight: 800;
-letter-spacing: 3px; text-transform: uppercase;
-border-radius: 8px; cursor: pointer;
-margin-top: 8px; transition: opacity 0.2s;
+  background: var(--accent); color: #fff; border: none;
+  padding: 14px; width: 100%;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px; font-weight: 800;
+  letter-spacing: 3px; text-transform: uppercase;
+  border-radius: 8px; cursor: pointer;
+  margin-top: 8px; transition: opacity 0.2s;
 }
 .submit-check:hover { opacity: 0.85; }
 .submit-check:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ── LOG ── */
 .log-row { display: flex; align-items: center; gap: 14px; padding: 11px 16px; border-bottom: 1px solid rgba(33,38,47,0.5); font-size: 13px; }
-.log-time { font-family: ‘Share Tech Mono’, monospace; font-size: 11px; color: var(–dim); min-width: 130px; }
-.log-pack { font-family: ‘Barlow Condensed’, sans-serif; font-size: 16px; font-weight: 700; color: var(–accent); min-width: 55px; }
+.log-time { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--dim); min-width: 130px; }
+.log-pack { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; color: var(--accent); min-width: 55px; }
+
+/* ── REPAIR ITEMS ── */
+.repair-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(33,38,47,0.6);
+  transition: background 0.1s;
+}
+.repair-item:hover { background: rgba(255,255,255,0.02); }
+.repair-item-left { flex: 1; }
+.repair-pack-id { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); }
+.repair-apparatus { font-size: 12px; color: var(--dim); margin-top: 1px; }
+.repair-items-list { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; }
+.repair-tag { font-family: 'Share Tech Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 3px; }
+.repair-tag.pack { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+.repair-tag.mask { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+.repair-tag.reg  { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+.repair-meta { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 4px; }
+.resolve-btn {
+  background: rgba(16,185,129,0.1); color: var(--green);
+  border: 1px solid rgba(16,185,129,0.3);
+  padding: 7px 16px; border-radius: 5px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 700; letter-spacing: 1px;
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.resolve-btn:hover { background: var(--green); color: #000; }
+.resolved-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 18px;
+  border-bottom: 1px solid rgba(33,38,47,0.4);
+  opacity: 0.6;
+}
+.resolved-item .repair-pack-id { color: var(--dim); font-size: 15px; }
 
 /* ── SEARCH BAR ── */
-.search-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(–border);background:var(–surface);}
-.search-icon{color:var(–muted);font-size:14px;flex-shrink:0;}
-.search-input{background:var(–bg);border:1px solid var(–border);color:var(–text);padding:8px 12px;border-radius:5px;font-family:‘Barlow’,sans-serif;font-size:13px;flex:1;outline:none;transition:border-color .2s;}
-.search-input:focus{border-color:var(–accent);}
-.search-input::placeholder{color:var(–muted);}
-.search-clear{background:none;border:none;color:var(–muted);cursor:pointer;font-size:16px;padding:0 4px;line-height:1;display:none;}
+.search-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface);}
+.search-icon{color:var(--muted);font-size:14px;flex-shrink:0;}
+.search-input{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:5px;font-family:'Barlow',sans-serif;font-size:13px;flex:1;outline:none;transition:border-color .2s;}
+.search-input:focus{border-color:var(--accent);}
+.search-input::placeholder{color:var(--muted);}
+.search-clear{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:0 4px;line-height:1;display:none;}
 .search-clear.visible{display:block;}
-.search-count{font-family:‘Share Tech Mono’,monospace;font-size:10px;color:var(–dim);white-space:nowrap;}
-.highlight{background:rgba(232,76,10,.25);color:var(–text);border-radius:2px;padding:0 1px;}
+.search-count{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);white-space:nowrap;}
+.highlight{background:rgba(204,31,31,.3);color:var(--text);border-radius:2px;padding:0 1px;}
 
 /* ── LOADING ── */
 .loading {
-display: flex; align-items: center; justify-content: center;
-padding: 48px; color: var(–dim);
-font-family: ‘Share Tech Mono’, monospace; font-size: 13px;
-gap: 12px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px; color: var(--dim);
+  font-family: 'Share Tech Mono', monospace; font-size: 13px;
+  gap: 12px;
 }
 .spinner {
-width: 18px; height: 18px;
-border: 2px solid var(–border);
-border-top-color: var(–accent);
-border-radius: 50%;
-animation: spin 0.7s linear infinite;
+  width: 18px; height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── TOAST ── */
 .toast {
-position: fixed; bottom: 24px; right: 24px;
-padding: 12px 20px; border-radius: 6px;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 15px; font-weight: 700; letter-spacing: 1px;
-z-index: 9999; display: none;
-animation: toastIn 0.3s ease;
+  position: fixed; bottom: 24px; right: 24px;
+  padding: 12px 20px; border-radius: 6px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 700; letter-spacing: 1px;
+  z-index: 9999; display: none;
+  animation: toastIn 0.3s ease;
 }
-.toast.ok { background: var(–green); color: #000; }
-.toast.err { background: var(–red); color: #fff; }
+.toast.ok  { background: var(--green); color: #000; }
+.toast.err { background: var(--red);   color: #fff; }
 @keyframes toastIn { from { transform: translateY(16px); opacity:0; } to { transform: translateY(0); opacity:1; } }
 
 /* ── APPARATUS FILTER BAR ── */
 .apparatus-bar {
-display: flex; align-items: center; gap: 8px;
-padding: 14px 0 18px;
-flex-wrap: wrap;
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 0 18px;
+  flex-wrap: wrap;
 }
 .apparatus-bar .bar-label {
-font-family: ‘Share Tech Mono’, monospace;
-font-size: 10px; color: var(–dim);
-text-transform: uppercase; letter-spacing: 1px;
-margin-right: 4px; white-space: nowrap;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--dim);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-right: 4px; white-space: nowrap;
 }
 .appr-btn {
-background: var(–card);
-border: 1px solid var(–border);
-color: var(–dim);
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 13px; font-weight: 700;
-letter-spacing: 1px; text-transform: uppercase;
-padding: 7px 16px; border-radius: 5px;
-cursor: pointer; transition: all 0.15s;
-white-space: nowrap;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--dim);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 7px 16px; border-radius: 5px;
+  cursor: pointer; transition: all 0.15s;
+  white-space: nowrap;
 }
-.appr-btn:hover { color: var(–text); border-color: var(–muted); }
+.appr-btn:hover { color: var(--text); border-color: var(--muted); }
 .appr-btn.active {
-background: var(–accent); color: #fff;
-border-color: var(–accent);
+  background: var(--accent); color: #fff;
+  border-color: var(--accent);
 }
 .appr-btn.all.active {
-background: var(–surface); color: var(–text);
-border-color: var(–text);
+  background: var(--surface); color: var(--text);
+  border-color: var(--text);
 }
 
 @media (max-width: 640px) {
-.stat-bar { grid-template-columns: repeat(2,1fr); }
-.detail-drawer.open { grid-template-columns: 1fr; }
-.nav-btn { padding: 0 10px; font-size: 12px; }
-.logo { font-size: 17px; margin-right: 12px; }
-.appr-btn { font-size: 12px; padding: 6px 10px; }
+  .stat-bar { grid-template-columns: repeat(2,1fr); }
+  .detail-drawer.open { grid-template-columns: 1fr; }
+  .nav-btn { padding: 0 10px; font-size: 12px; }
+  .logo { font-size: 17px; margin-right: 12px; }
+  .appr-btn { font-size: 12px; padding: 6px 10px; }
 }
 </style>
-
 </head>
 <body>
 
 <!-- ── HEADER ── -->
-
 <div class="header">
-<div class="logo">SCBA <span>//</span> S56</div>
-<nav class="nav">
-<button class="nav-btn active" onclick="showSection('registry',this)">Registry</button>
-<button class="nav-btn" onclick="showSection('masks',this)">Masks</button>
-<button class="nav-btn" onclick="showSection('bottles',this)">Bottles</button>
-<button class="nav-btn" onclick="showSection('truckcheck',this)">Truck Check</button>
-<button class="nav-btn" onclick="showSection('log',this)">Log</button>
-</nav>
-<div class="header-right">
-<span id="syncStatus">—</span>
-<button class="sync-btn" onclick="loadAll()">↻ SYNC</button>
-</div>
+  <div class="logo">MANOA <span>//</span> S56</div>
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showSection('registry',this)">Registry</button>
+    <button class="nav-btn" onclick="showSection('masks',this)">Masks</button>
+    <button class="nav-btn" onclick="showSection('bottles',this)">Bottles</button>
+    <button class="nav-btn" onclick="showSection('truckcheck',this)">Truck Check</button>
+    <button class="nav-btn" onclick="showSection('log',this)">Log</button>
+    <button class="nav-btn" id="repairNavBtn" onclick="showSection('repairs',this)">Repairs</button>
+  </nav>
+  <div class="header-right">
+    <span id="syncStatus">—</span>
+    <button class="sync-btn" onclick="loadAll()">↻ SYNC</button>
+  </div>
 </div>
 
 <div class="main">
 
 <!-- ── REGISTRY ── -->
-
 <div id="registry" class="section active">
-<div class="apparatus-bar" id="registryFilter"></div>
-<div class="stat-bar" id="registryStats">
-<div class="stat"><div class="stat-num accent" id="statTotal">—</div><div class="stat-label">PACKS</div></div>
-<div class="stat"><div class="stat-num green" id="statOk">—</div><div class="stat-label">IN SERVICE</div></div>
-<div class="stat"><div class="stat-num red" id="statIssue">—</div><div class="stat-label">ISSUES</div></div>
-<div class="stat"><div class="stat-num amber" id="statHydro">—</div><div class="stat-label">HYDRO DUE</div></div>
-</div>
-<div class="card">
-<div class="card-head">
-<div class="card-title">Pack Registry</div>
-</div>
-<div id="registryBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-</div>
+  <div class="apparatus-bar" id="registryFilter"></div>
+  <div class="stat-bar" id="registryStats">
+    <div class="stat"><div class="stat-num accent" id="statTotal">—</div><div class="stat-label">PACKS</div></div>
+    <div class="stat"><div class="stat-num green"  id="statOk">—</div><div class="stat-label">IN SERVICE</div></div>
+    <div class="stat"><div class="stat-num red"    id="statIssue">—</div><div class="stat-label">ISSUES</div></div>
+    <div class="stat"><div class="stat-num amber"  id="statHydro">—</div><div class="stat-label">HYDRO DUE</div></div>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Pack Registry</div>
+    </div>
+    <div id="registryBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+  </div>
 </div>
 
 <!-- ── MASKS ── -->
-
 <div id="masks" class="section">
-<div class="apparatus-bar" id="masksFilter"></div>
-<div class="card">
-<div class="card-head">
-<div class="card-title">Mask Assignments</div>
-<span class="badge badge-blue" id="maskCount">—</span>
-</div>
-<div class="search-bar">
-<span class="search-icon">🔍</span>
-<input class="search-input" id="maskSearch" placeholder="Search serial, name, size, pack ID..." oninput="renderMasks()" />
-<button class="search-clear" id="maskClear" onclick="clearSearch('maskSearch','maskClear');renderMasks()">✕</button>
-<span class="search-count" id="maskSearchCount"></span>
-</div>
-<div id="masksBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-</div>
+  <div class="apparatus-bar" id="masksFilter"></div>
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Mask Assignments</div>
+      <span class="badge badge-blue" id="maskCount">—</span>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="maskSearch" placeholder="Search serial, name, size, pack ID..." oninput="renderMasks()" />
+      <button class="search-clear" id="maskClear" onclick="clearSearch('maskSearch','maskClear');renderMasks()">✕</button>
+      <span class="search-count" id="maskSearchCount"></span>
+    </div>
+    <div id="masksBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+  </div>
 </div>
 
 <!-- ── BOTTLES ── -->
-
 <div id="bottles" class="section">
-<div class="apparatus-bar" id="bottlesFilter"></div>
-<div class="card">
-<div class="card-head">
-<div class="card-title">Bottle / Cylinder Hydro Dates</div>
-<span class="badge badge-blue" id="bottleCount">—</span>
-</div>
-<div class="search-bar">
-<span class="search-icon">🔍</span>
-<input class="search-input" id="bottleSearch" placeholder="Search bottle ID, apparatus, hydro date..." oninput="renderBottles()" />
-<button class="search-clear" id="bottleClear" onclick="clearSearch('bottleSearch','bottleClear');renderBottles()">✕</button>
-<span class="search-count" id="bottleSearchCount"></span>
-</div>
-<div id="bottlesBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-</div>
+  <div class="apparatus-bar" id="bottlesFilter"></div>
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Bottle / Cylinder Hydro Dates</div>
+      <span class="badge badge-blue" id="bottleCount">—</span>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="bottleSearch" placeholder="Search bottle ID, apparatus, hydro date..." oninput="renderBottles()" />
+      <button class="search-clear" id="bottleClear" onclick="clearSearch('bottleSearch','bottleClear');renderBottles()">✕</button>
+      <span class="search-count" id="bottleSearchCount"></span>
+    </div>
+    <div id="bottlesBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+  </div>
 </div>
 
 <!-- ── TRUCK CHECK ── -->
-
 <div id="truckcheck" class="section">
-<div class="apparatus-bar" id="checkFilter"></div>
-<div class="checker-bar">
-<label>CHECKER NAME:</label>
-<input class="checker-input" id="checkerName" placeholder="Enter your name..." />
-</div>
-<div id="checkBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-<button class="submit-check" id="submitBtn" onclick="submitCheck()" disabled>▶ SUBMIT TRUCK CHECK</button>
+  <div class="apparatus-bar" id="checkFilter"></div>
+  <div class="checker-bar">
+    <label>CHECKER NAME:</label>
+    <input class="checker-input" id="checkerName" placeholder="Enter your name..." />
+  </div>
+  <div id="checkBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+  <button class="submit-check" id="submitBtn" onclick="submitCheck()" disabled>▶ SUBMIT TRUCK CHECK</button>
 </div>
 
 <!-- ── LOG ── -->
-
 <div id="log" class="section">
-<div class="apparatus-bar" id="logFilter"></div>
-<div class="card">
-<div class="card-head">
-<div class="card-title">Check History</div>
+  <div class="apparatus-bar" id="logFilter"></div>
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Check History</div>
+    </div>
+    <div id="logBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+  </div>
 </div>
-<div id="logBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-</div>
+
+<!-- ── REPAIRS ── -->
+<div id="repairs" class="section">
+  <div class="apparatus-bar" id="repairsFilter"></div>
+  <div class="stat-bar">
+    <div class="stat"><div class="stat-num red"   id="repairStatOpen">—</div><div class="stat-label">OPEN ITEMS</div></div>
+    <div class="stat"><div class="stat-num amber" id="repairStatPack">—</div><div class="stat-label">PACK FAILS</div></div>
+    <div class="stat"><div class="stat-num amber" id="repairStatMask">—</div><div class="stat-label">MASK FAILS</div></div>
+    <div class="stat"><div class="stat-num amber" id="repairStatReg">—</div><div class="stat-label">REG FAILS</div></div>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Open Repair Items</div>
+      <span class="badge badge-red" id="repairOpenCount">—</span>
+    </div>
+    <div id="repairsOpenBody"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Resolved</div>
+      <span class="badge badge-green" id="repairResolvedCount">—</span>
+    </div>
+    <div id="repairsResolvedBody"></div>
+  </div>
 </div>
 
 </div><!-- /main -->
@@ -440,493 +493,609 @@ border-color: var(–text);
 
 <script>
 // ── CONFIG — paste your values here once, then share the file ─────────────
-const API_KEY = 'AIzaSyCvMTI3fKnnY_SEanKOV06a_RDOx5jkqRk';
+const API_KEY  = 'PASTE_YOUR_API_KEY_HERE';
 const SHEET_ID = '11joexsJGkijm9r_p-tGI3OOu7W_Lb-ymeYi2HSKOsh4';
 
 // ── State ──────────────────────────────────────────────────────────────────
-let DB = { packs:[], masks:[], bottles:[], members:[], log:[] };
+let DB = { packs:[], masks:[], bottles:[], members:[], log:[], repairs:[] };
 let checkState = {};
 let expandedPack = null;
 
 const APPARATUS = ['Squad 56','Engine 56','Rescue 56','Spec Ops 56','Utility 56'];
-// Per-section active filter: null = ALL
-let filters = { registry: null, masks: null, bottles: null, truckcheck: null, log: null };
+let filters = { registry: null, masks: null, bottles: null, truckcheck: null, log: null, repairs: null };
 
 function buildFilterBar(containerId, section) {
-const el = document.getElementById(containerId);
-if (!el) return;
-const active = filters[section];
-el.innerHTML = `
-<span class="bar-label">Unit:</span>
-<button class="appr-btn all ${!active ? 'active' : ''}" onclick="setFilter('${section}', null)">ALL</button>
-${APPARATUS.map(a => `
-<button class="appr-btn ${active===a?'active':''}" onclick="setFilter('${section}','${a}')">${a}</button>
-`).join('')}`;
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const active = filters[section];
+  el.innerHTML = `
+    <span class="bar-label">Unit:</span>
+    <button class="appr-btn all ${!active ? 'active' : ''}" onclick="setFilter('${section}', null)">ALL</button>
+    ${APPARATUS.map(a => `
+      <button class="appr-btn ${active===a?'active':''}" onclick="setFilter('${section}','${a}')">${a}</button>
+    `).join('')}`;
 }
 
 function setFilter(section, value) {
-filters[section] = value;
-buildFilterBar(section+'Filter', section);
-if (section === 'registry') renderRegistry();
-if (section === 'masks') renderMasks();
-if (section === 'bottles') renderBottles();
-if (section === 'truckcheck') renderCheckPacks();
-if (section === 'log') renderLog();
+  filters[section] = value;
+  buildFilterBar(section+'Filter', section);
+  if (section === 'registry')   renderRegistry();
+  if (section === 'masks')      renderMasks();
+  if (section === 'bottles')    renderBottles();
+  if (section === 'truckcheck') renderCheckPacks();
+  if (section === 'log')        renderLog();
+  if (section === 'repairs')    renderRepairs();
 }
 
 // helper: does an apparatus string match the active filter?
 function matchesFilter(section, apparatusStr) {
-const f = filters[section];
-if (!f) return true;
-return (apparatusStr || '').toLowerCase().includes(f.toLowerCase());
+  const f = filters[section];
+  if (!f) return true;
+  return (apparatusStr || '').toLowerCase().includes(f.toLowerCase());
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
-if (API_KEY === 'PASTE_YOUR_API_KEY_HERE') {
-document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-document.getElementById('registry').classList.add('active');
-document.getElementById('registryBody').innerHTML = `
-<div style="padding:40px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--amber);line-height:2">
-⚠ API KEY NOT SET<br>
-<span style="color:var(--dim);font-size:11px">Open SCBA_App.html in a text editor<br>and replace PASTE_YOUR_API_KEY_HERE with your Google API key</span>
-</div>`;
-return;
-}
-['registry','masks','bottles','truckcheck','log'].forEach(s =>
-buildFilterBar(s+'Filter', s)
-);
-loadAll();
+  if (API_KEY === 'PASTE_YOUR_API_KEY_HERE') {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('registry').classList.add('active');
+    document.getElementById('registryBody').innerHTML = `
+      <div style="padding:40px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--amber);line-height:2">
+        ⚠ API KEY NOT SET<br>
+        <span style="color:var(--dim);font-size:11px">Open SCBA_App.html in a text editor<br>and replace PASTE_YOUR_API_KEY_HERE with your Google API key</span>
+      </div>`;
+    return;
+  }
+  ['registry','masks','bottles','truckcheck','log'].forEach(s =>
+    buildFilterBar(s+'Filter', s)
+  );
+  loadAll();
 });
 
 // ── Google Sheets API ──────────────────────────────────────────────────────
 async function fetchTab(tab) {
-const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(tab)}?key=${API_KEY}`;
-const res = await fetch(url);
-if (!res.ok) {
-const err = await res.json();
-throw new Error(err.error?.message || res.statusText);
-}
-const data = await res.json();
-const rows = data.values || [];
-if (rows.length < 2) return [];
-const headers = rows[0];
-return rows.slice(1).map(r => {
-const obj = {};
-headers.forEach((h,i) => obj[h] = r[i] || '');
-return obj;
-});
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(tab)}?key=${API_KEY}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || res.statusText);
+  }
+  const data = await res.json();
+  const rows = data.values || [];
+  if (rows.length < 2) return [];
+  const headers = rows[0];
+  return rows.slice(1).map(r => {
+    const obj = {};
+    headers.forEach((h,i) => obj[h] = r[i] || '');
+    return obj;
+  });
 }
 
 async function appendRow(tab, values) {
-const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(tab)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS&key=${API_KEY}`;
-const res = await fetch(url, {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ values: [values] })
-});
-if (!res.ok) {
-const err = await res.json();
-throw new Error(err.error?.message || res.statusText);
-}
-return res.json();
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(tab)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS&key=${API_KEY}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values: [values] })
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || res.statusText);
+  }
+  return res.json();
 }
 
 // ── Load All ───────────────────────────────────────────────────────────────
 async function loadAll() {
-setSyncStatus('syncing');
-try {
-const [packs, masks, bottles, members, log] = await Promise.all([
-fetchTab('Packs'), fetchTab('Masks'), fetchTab('Bottles'),
-fetchTab('Members'), fetchTab('CheckLog')
-]);
-DB = { packs, masks, bottles, members, log };
-// Build all filter bars
-['registry','masks','bottles','truckcheck','log'].forEach(s =>
-buildFilterBar(s+'Filter', s)
-);
-renderRegistry();
-renderMasks();
-renderBottles();
-renderCheckPacks();
-renderLog();
-setSyncStatus('ok');
-} catch(e) {
-setSyncStatus('err');
-toast('Sync failed: ' + e.message, 'err');
-}
+  setSyncStatus('syncing');
+  try {
+    const [packs, masks, bottles, members, log, repairs] = await Promise.all([
+      fetchTab('Packs'), fetchTab('Masks'), fetchTab('Bottles'),
+      fetchTab('Members'), fetchTab('CheckLog'), fetchTab('RepairLog')
+    ]);
+    DB = { packs, masks, bottles, members, log, repairs };
+    // Build all filter bars
+    ['registry','masks','bottles','truckcheck','log','repairs'].forEach(s =>
+      buildFilterBar(s+'Filter', s)
+    );
+    renderRegistry();
+    renderMasks();
+    renderBottles();
+    renderCheckPacks();
+    renderLog();
+    renderRepairs();
+    updateRepairBadge();
+    setSyncStatus('ok');
+  } catch(e) {
+    setSyncStatus('err');
+    toast('Sync failed: ' + e.message, 'err');
+  }
 }
 
 function setSyncStatus(state) {
-const el = document.getElementById('syncStatus');
-const now = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-if (state === 'syncing') { el.textContent = '↻ syncing...'; el.style.color = 'var(--amber)'; }
-if (state === 'ok') { el.textContent = `synced ${now}`; el.style.color = 'var(--green)'; }
-if (state === 'err') { el.textContent = 'sync failed'; el.style.color = 'var(--red)'; }
+  const el = document.getElementById('syncStatus');
+  const now = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  if (state === 'syncing') { el.textContent = '↻ syncing...'; el.style.color = 'var(--amber)'; }
+  if (state === 'ok')      { el.textContent = `synced ${now}`; el.style.color = 'var(--green)'; }
+  if (state === 'err')     { el.textContent = 'sync failed'; el.style.color = 'var(--red)'; }
 }
 
 // ── Registry ───────────────────────────────────────────────────────────────
 function renderRegistry() {
-const packs = DB.packs.filter(p => matchesFilter('registry', p.Apparatus));
-const allBottles = DB.bottles.filter(b => matchesFilter('registry', b.Apparatus));
+  const packs = DB.packs.filter(p => matchesFilter('registry', p.Apparatus));
+  const allBottles = DB.bottles.filter(b => matchesFilter('registry', b.Apparatus));
 
-document.getElementById('statTotal').textContent = packs.length;
-document.getElementById('statOk').textContent = packs.filter(p => p.Status === 'IN SERVICE').length;
-document.getElementById('statIssue').textContent = packs.filter(p => p.Status !== 'IN SERVICE').length;
+  document.getElementById('statTotal').textContent = packs.length;
+  document.getElementById('statOk').textContent    = packs.filter(p => p.Status === 'IN SERVICE').length;
+  document.getElementById('statIssue').textContent = packs.filter(p => p.Status !== 'IN SERVICE').length;
 
-const now = new Date();
-const soon = new Date(); soon.setMonth(soon.getMonth() + 6);
-const hydroDue = allBottles.filter(b => {
-const d = new Date(b.HydroDate + '-01');
-return d <= soon;
-}).length;
-document.getElementById('statHydro').textContent = hydroDue;
+  const now = new Date();
+  const soon = new Date(); soon.setMonth(soon.getMonth() + 6);
+  const hydroDue = allBottles.filter(b => {
+    const d = new Date(b.HydroDate + '-01');
+    return d <= soon;
+  }).length;
+  document.getElementById('statHydro').textContent = hydroDue;
 
-const html = `
-<table>
-<thead><tr>
-<th>Pack ID</th><th>Apparatus</th><th>Pack Serial</th>
-<th>Reg Serial</th><th>Next Reg Svc</th><th>Status</th>
-</tr></thead>
-<tbody>
-${packs.map(p => `
-<tr onclick="toggleDetail('${p.PackID}')" style="cursor:pointer">
-<td class="pack-id-cell">${p.PackID}</td>
-<td>${p.Apparatus}</td>
-<td class="mono">${p['PackSerial#'] || p.PackSerial || ''}</td>
-<td class="mono">${p.RegSerial}</td>
-<td class="mono">${p.RegNextService}</td>
-<td><span class="badge ${p.Status==='IN SERVICE'?'badge-green':'badge-red'}">${p.Status}</span></td>
-</tr>
-<tr id="detail-${p.PackID}"><td colspan="6" style="padding:0">
-<div class="detail-drawer" id="drawer-${p.PackID}">
-<div class="detail-group">
-<h4>Pack / Cylinder</h4>
-<div class="detail-row"><span>Serial #</span><span>${p['PackSerial#'] || p.PackSerial || '—'}</span></div>
-<div class="detail-row"><span>Model</span><span>${p.PaclModel || p.PackModel || '—'}</span></div>
-<div class="detail-row"><span>Mfg Date</span><span>${p.MfgDate || '—'}</span></div>
-</div>
-<div class="detail-group">
-<h4>Regulator</h4>
-<div class="detail-row"><span>Serial #</span><span>${p.RegSerial || '—'}</span></div>
-<div class="detail-row"><span>Model</span><span>${p.Remodel || p.RegModel || '—'}</span></div>
-<div class="detail-row"><span>Last Service</span><span>${p.RegLastService || '—'}</span></div>
-<div class="detail-row"><span>Next Service</span><span>${p.RegNextService || '—'}</span></div>
-</div>
-<div class="detail-group">
-<h4>Assigned Mask</h4>
-${(() => {
-const m = DB.masks.find(x => x.PackID === p.PackID);
-return m ? `
-<div class="detail-row"><span>Serial #</span><span>${m.MaskSerial}</span></div>
-<div class="detail-row"><span>Model</span><span>${m.MaskModel}</span></div>
-<div class="detail-row"><span>Size</span><span>${m.Size}</span></div>
-<div class="detail-row"><span>Assigned To</span><span>${m['Assigned to'] || m.AssignedTo || '—'}</span></div>
-<div class="detail-row"><span>Status</span><span>${m.Status}</span></div>
-` : '<div class="detail-row"><span>No mask assigned</span></div>';
-})()}
-</div>
-</div>
-</td></tr>
-`).join('')}
-</tbody>
-</table>`;
-document.getElementById('registryBody').innerHTML = html;
+  const html = `
+    <table>
+      <thead><tr>
+        <th>Pack ID</th><th>Apparatus</th><th>Pack Serial</th>
+        <th>Reg Serial</th><th>Next Reg Svc</th><th>Status</th>
+      </tr></thead>
+      <tbody>
+        ${packs.map(p => `
+          <tr onclick="toggleDetail('${p.PackID}')" style="cursor:pointer">
+            <td class="pack-id-cell">${p.PackID}</td>
+            <td>${p.Apparatus}</td>
+            <td class="mono">${p['PackSerial#'] || p.PackSerial || ''}</td>
+            <td class="mono">${p.RegSerial}</td>
+            <td class="mono">${p.RegNextService}</td>
+            <td><span class="badge ${p.Status==='IN SERVICE'?'badge-green':'badge-red'}">${p.Status}</span></td>
+          </tr>
+          <tr id="detail-${p.PackID}"><td colspan="6" style="padding:0">
+            <div class="detail-drawer" id="drawer-${p.PackID}">
+              <div class="detail-group">
+                <h4>Pack / Cylinder</h4>
+                <div class="detail-row"><span>Serial #</span><span>${p['PackSerial#'] || p.PackSerial || '—'}</span></div>
+                <div class="detail-row"><span>Model</span><span>${p.PaclModel || p.PackModel || '—'}</span></div>
+                <div class="detail-row"><span>Mfg Date</span><span>${p.MfgDate || '—'}</span></div>
+              </div>
+              <div class="detail-group">
+                <h4>Regulator</h4>
+                <div class="detail-row"><span>Serial #</span><span>${p.RegSerial || '—'}</span></div>
+                <div class="detail-row"><span>Model</span><span>${p.Remodel || p.RegModel || '—'}</span></div>
+                <div class="detail-row"><span>Last Service</span><span>${p.RegLastService || '—'}</span></div>
+                <div class="detail-row"><span>Next Service</span><span>${p.RegNextService || '—'}</span></div>
+              </div>
+              <div class="detail-group">
+                <h4>Assigned Mask</h4>
+                ${(() => {
+                  const m = DB.masks.find(x => x.PackID === p.PackID);
+                  return m ? `
+                    <div class="detail-row"><span>Serial #</span><span>${m.MaskSerial}</span></div>
+                    <div class="detail-row"><span>Model</span><span>${m.MaskModel}</span></div>
+                    <div class="detail-row"><span>Size</span><span>${m.Size}</span></div>
+                    <div class="detail-row"><span>Assigned To</span><span>${m['Assigned to'] || m.AssignedTo || '—'}</span></div>
+                    <div class="detail-row"><span>Status</span><span>${m.Status}</span></div>
+                  ` : '<div class="detail-row"><span>No mask assigned</span></div>';
+                })()}
+              </div>
+            </div>
+          </td></tr>
+        `).join('')}
+      </tbody>
+    </table>`;
+  document.getElementById('registryBody').innerHTML = html;
 }
 
 function toggleDetail(packId) {
-const drawer = document.getElementById('drawer-' + packId);
-if (!drawer) return;
-if (expandedPack && expandedPack !== packId) {
-const prev = document.getElementById('drawer-' + expandedPack);
-if (prev) prev.classList.remove('open');
-}
-drawer.classList.toggle('open');
-expandedPack = drawer.classList.contains('open') ? packId : null;
+  const drawer = document.getElementById('drawer-' + packId);
+  if (!drawer) return;
+  if (expandedPack && expandedPack !== packId) {
+    const prev = document.getElementById('drawer-' + expandedPack);
+    if (prev) prev.classList.remove('open');
+  }
+  drawer.classList.toggle('open');
+  expandedPack = drawer.classList.contains('open') ? packId : null;
 }
 
 // ── Masks ──────────────────────────────────────────────────────────────────
 function renderMasks() {
-const query = (document.getElementById('maskSearch')?.value || '').trim().toLowerCase();
-const clearBtn = document.getElementById('maskClear');
-if (clearBtn) clearBtn.classList.toggle('visible', query.length > 0);
+  const query = (document.getElementById('maskSearch')?.value || '').trim().toLowerCase();
+  const clearBtn = document.getElementById('maskClear');
+  if (clearBtn) clearBtn.classList.toggle('visible', query.length > 0);
 
-let masks = DB.masks.filter(m => {
-if (!filters.masks) return true;
-const pack = DB.packs.find(p => p.PackID === m.PackID);
-return pack ? matchesFilter('masks', pack.Apparatus) : matchesFilter('masks', m.PackID);
-});
+  let masks = DB.masks.filter(m => {
+    if (!filters.masks) return true;
+    const pack = DB.packs.find(p => p.PackID === m.PackID);
+    return pack ? matchesFilter('masks', pack.Apparatus) : matchesFilter('masks', m.PackID);
+  });
 
-if (query) {
-masks = masks.filter(m => {
-const pack = DB.packs.find(p => p.PackID === m.PackID);
-const apparatus = pack ? pack.Apparatus.toLowerCase() : '';
-return (
-m.MaskSerial.toLowerCase().includes(query) ||
-(m['Assigned to'] || '').toLowerCase().includes(query) ||
-m.MaskModel.toLowerCase().includes(query) ||
-m.Size.toLowerCase().includes(query) ||
-m.PackID.toLowerCase().includes(query) ||
-m.Status.toLowerCase().includes(query) ||
-apparatus.includes(query)
-);
-});
-}
+  if (query) {
+    masks = masks.filter(m => {
+      const pack = DB.packs.find(p => p.PackID === m.PackID);
+      const apparatus = pack ? pack.Apparatus.toLowerCase() : '';
+      return (
+        m.MaskSerial.toLowerCase().includes(query) ||
+        (m['Assigned to'] || '').toLowerCase().includes(query) ||
+        m.MaskModel.toLowerCase().includes(query) ||
+        m.Size.toLowerCase().includes(query) ||
+        m.PackID.toLowerCase().includes(query) ||
+        m.Status.toLowerCase().includes(query) ||
+        apparatus.includes(query)
+      );
+    });
+  }
 
-document.getElementById('maskCount').textContent = masks.length + ' MASKS';
-const countEl = document.getElementById('maskSearchCount');
-if (countEl) countEl.textContent = query ? `${masks.length} result${masks.length !== 1 ? 's' : ''}` : '';
+  document.getElementById('maskCount').textContent = masks.length + ' MASKS';
+  const countEl = document.getElementById('maskSearchCount');
+  if (countEl) countEl.textContent = query ? `${masks.length} result${masks.length !== 1 ? 's' : ''}` : '';
 
-function hl(str) {
-if (!query || !str) return str || '—';
-const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-return str.replace(re, '<span class="highlight">$1</span>');
-}
+  function hl(str) {
+    if (!query || !str) return str || '—';
+    const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    return str.replace(re, '<span class="highlight">$1</span>');
+  }
 
-const html = masks.length ? `
-<table>
-<thead><tr>
-<th>Mask Serial</th><th>Model</th><th>Size</th>
-<th>Assigned To</th><th>Location (Pack)</th><th>Status</th>
-</tr></thead>
-<tbody>
-${masks.map(m => `
-<tr>
-<td class="mono">${hl(m.MaskSerial)}</td>
-<td>${hl(m.MaskModel)}</td>
-<td>${hl(m.Size)}</td>
-<td>${hl(m['Assigned to'] || m.AssignedTo || '—')}</td>
-<td class="pack-id-cell" style="font-size:15px">${hl(m.PackID)}</td>
-<td><span class="badge ${m.Status==='OK'?'badge-green':m.Status==='FIT TEST DUE'?'badge-amber':'badge-red'}">${m.Status}</span></td>
-</tr>
-`).join('')}
-</tbody>
-</table>`
-: `<div style="padding:32px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted)">No masks match "${query}"</div>`;
+  const html = masks.length ? `
+    <table>
+      <thead><tr>
+        <th>Mask Serial</th><th>Model</th><th>Size</th>
+        <th>Assigned To</th><th>Location (Pack)</th><th>Status</th>
+      </tr></thead>
+      <tbody>
+        ${masks.map(m => `
+          <tr>
+            <td class="mono">${hl(m.MaskSerial)}</td>
+            <td>${hl(m.MaskModel)}</td>
+            <td>${hl(m.Size)}</td>
+            <td>${hl(m['Assigned to'] || m.AssignedTo || '—')}</td>
+            <td class="pack-id-cell" style="font-size:15px">${hl(m.PackID)}</td>
+            <td><span class="badge ${m.Status==='OK'?'badge-green':m.Status==='FIT TEST DUE'?'badge-amber':'badge-red'}">${m.Status}</span></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>`
+  : `<div style="padding:32px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted)">No masks match "${query}"</div>`;
 
-document.getElementById('masksBody').innerHTML = html;
+  document.getElementById('masksBody').innerHTML = html;
 }
 
 // ── Bottles ────────────────────────────────────────────────────────────────
 function renderBottles() {
-const query = (document.getElementById('bottleSearch')?.value || '').trim().toLowerCase();
-const clearBtn = document.getElementById('bottleClear');
-if (clearBtn) clearBtn.classList.toggle('visible', query.length > 0);
+  const query = (document.getElementById('bottleSearch')?.value || '').trim().toLowerCase();
+  const clearBtn = document.getElementById('bottleClear');
+  if (clearBtn) clearBtn.classList.toggle('visible', query.length > 0);
 
-const now = new Date();
-const soon = new Date(); soon.setMonth(soon.getMonth() + 6);
+  const now = new Date();
+  const soon = new Date(); soon.setMonth(soon.getMonth() + 6);
 
-let bottles = DB.bottles.filter(b => matchesFilter('bottles', b.Apparatus));
+  let bottles = DB.bottles.filter(b => matchesFilter('bottles', b.Apparatus));
 
-if (query) {
-bottles = bottles.filter(b => {
-const d = new Date(b.HydroDate + '-01');
-const overdue = d < now, dueSoon = d <= soon && d >= now;
-const status = overdue ? 'overdue' : dueSoon ? 'due soon' : 'ok';
-return (
-b.BottleID.toLowerCase().includes(query) ||
-b.Apparatus.toLowerCase().includes(query) ||
-b.HydroDate.toLowerCase().includes(query) ||
-status.includes(query)
-);
-});
-}
+  if (query) {
+    bottles = bottles.filter(b => {
+      const d = new Date(b.HydroDate + '-01');
+      const overdue = d < now, dueSoon = d <= soon && d >= now;
+      const status = overdue ? 'overdue' : dueSoon ? 'due soon' : 'ok';
+      return (
+        b.BottleID.toLowerCase().includes(query) ||
+        b.Apparatus.toLowerCase().includes(query) ||
+        b.HydroDate.toLowerCase().includes(query) ||
+        status.includes(query)
+      );
+    });
+  }
 
-document.getElementById('bottleCount').textContent = bottles.length + ' BOTTLES';
-const countEl = document.getElementById('bottleSearchCount');
-if (countEl) countEl.textContent = query ? `${bottles.length} result${bottles.length !== 1 ? 's' : ''}` : '';
+  document.getElementById('bottleCount').textContent = bottles.length + ' BOTTLES';
+  const countEl = document.getElementById('bottleSearchCount');
+  if (countEl) countEl.textContent = query ? `${bottles.length} result${bottles.length !== 1 ? 's' : ''}` : '';
 
-function hl(str) {
-if (!query || !str) return str || '—';
-const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-return str.replace(re, '<span class="highlight">$1</span>');
-}
+  function hl(str) {
+    if (!query || !str) return str || '—';
+    const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    return str.replace(re, '<span class="highlight">$1</span>');
+  }
 
-const html = bottles.length ? `
-<table>
-<thead><tr><th>Bottle ID</th><th>Apparatus</th><th>Hydro Date</th><th>Status</th></tr></thead>
-<tbody>
-${bottles.map(b => {
-const d = new Date(b.HydroDate + '-01');
-const overdue = d < now, dueSoon = d <= soon && d >= now;
-const status = overdue ? 'OVERDUE' : dueSoon ? 'DUE SOON' : 'OK';
-const badge = overdue ? 'badge-red' : dueSoon ? 'badge-amber' : 'badge-green';
-return `<tr>
-<td class="mono">${hl(b.BottleID)}</td>
-<td>${hl(b.Apparatus)}</td>
-<td class="mono">${hl(b.HydroDate)}</td>
-<td><span class="badge ${badge}">${status}</span></td>
-</tr>`;
-}).join('')}
-</tbody>
-</table>`
-: `<div style="padding:32px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted)">No bottles match "${query}"</div>`;
+  const html = bottles.length ? `
+    <table>
+      <thead><tr><th>Bottle ID</th><th>Apparatus</th><th>Hydro Date</th><th>Status</th></tr></thead>
+      <tbody>
+        ${bottles.map(b => {
+          const d = new Date(b.HydroDate + '-01');
+          const overdue = d < now, dueSoon = d <= soon && d >= now;
+          const status = overdue ? 'OVERDUE' : dueSoon ? 'DUE SOON' : 'OK';
+          const badge  = overdue ? 'badge-red' : dueSoon ? 'badge-amber' : 'badge-green';
+          return `<tr>
+            <td class="mono">${hl(b.BottleID)}</td>
+            <td>${hl(b.Apparatus)}</td>
+            <td class="mono">${hl(b.HydroDate)}</td>
+            <td><span class="badge ${badge}">${status}</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`
+  : `<div style="padding:32px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted)">No bottles match "${query}"</div>`;
 
-document.getElementById('bottlesBody').innerHTML = html;
+  document.getElementById('bottlesBody').innerHTML = html;
 }
 
 // ── Truck Check ────────────────────────────────────────────────────────────
 function renderCheckPacks() {
-checkState = {};
-document.getElementById('submitBtn').disabled = true;
+  checkState = {};
+  document.getElementById('submitBtn').disabled = true;
 
-const packs = DB.packs.filter(p => matchesFilter('truckcheck', p.Apparatus));
+  const packs = DB.packs.filter(p => matchesFilter('truckcheck', p.Apparatus));
 
-const html = packs.map(p => {
-const mask = DB.masks.find(m => m.PackID === p.PackID);
-const bottle = DB.bottles.find(b => b.Apparatus === p.Apparatus);
-return `
-<div class="check-pack">
-<div class="check-pack-hdr">
-<div class="pack-id-cell">${p.PackID}</div>
-<div style="flex:1;font-size:13px;color:var(--dim)">${p.Apparatus}</div>
-<span class="badge badge-green" id="chk-status-${p.PackID}">PENDING</span>
-</div>
-<div class="check-items">
-${checkRow(p.PackID, 'pack', '🫁 SCBA Pack', p['PackSerial#'] || p.PackSerial || '')}
-${checkRow(p.PackID, 'mask', '😷 Face Mask', mask ? mask.MaskSerial + ' · ' + mask.Size : 'No mask assigned')}
-${checkRow(p.PackID, 'reg', '🔧 Regulator', p.RegSerial)}
-</div>
-</div>`;
-}).join('');
+  const html = packs.map(p => {
+    const mask = DB.masks.find(m => m.PackID === p.PackID);
+    const bottle = DB.bottles.find(b => b.Apparatus === p.Apparatus);
+    return `
+      <div class="check-pack">
+        <div class="check-pack-hdr">
+          <div class="pack-id-cell">${p.PackID}</div>
+          <div style="flex:1;font-size:13px;color:var(--dim)">${p.Apparatus}</div>
+          <span class="badge badge-green" id="chk-status-${p.PackID}">PENDING</span>
+        </div>
+        <div class="check-items">
+          ${checkRow(p.PackID, 'pack', '🫁 SCBA Pack', p['PackSerial#'] || p.PackSerial || '')}
+          ${checkRow(p.PackID, 'mask', '😷 Face Mask', mask ? mask.MaskSerial + ' · ' + mask.Size : 'No mask assigned')}
+          ${checkRow(p.PackID, 'reg',  '🔧 Regulator', p.RegSerial)}
+        </div>
+      </div>`;
+  }).join('');
 
-document.getElementById('checkBody').innerHTML = html || '<div class="loading">No packs for this apparatus.</div>';
+  document.getElementById('checkBody').innerHTML = html || '<div class="loading">No packs for this apparatus.</div>';
 }
 
 function checkRow(packId, type, name, serial) {
-const key = packId + '_' + type;
-return `
-<div class="check-item">
-<div class="check-item-info">
-<div class="check-item-name">${name}</div>
-<div class="check-item-serial">${serial}</div>
-</div>
-<button class="chk-btn chk-pass" id="pass-${key}" onclick="setCheck('${packId}','${key}','pass')">✓ PASS</button>
-<button class="chk-btn chk-fail" id="fail-${key}" onclick="setCheck('${packId}','${key}','fail')">✗ FAIL</button>
-</div>`;
+  const key = packId + '_' + type;
+  return `
+    <div class="check-item">
+      <div class="check-item-info">
+        <div class="check-item-name">${name}</div>
+        <div class="check-item-serial">${serial}</div>
+      </div>
+      <button class="chk-btn chk-pass" id="pass-${key}" onclick="setCheck('${packId}','${key}','pass')">✓ PASS</button>
+      <button class="chk-btn chk-fail" id="fail-${key}" onclick="setCheck('${packId}','${key}','fail')">✗ FAIL</button>
+    </div>`;
 }
 
 function setCheck(packId, key, val) {
-checkState[key] = val;
-document.getElementById('pass-' + key).classList.toggle('on', val === 'pass');
-document.getElementById('fail-' + key).classList.toggle('on', val === 'fail');
+  checkState[key] = val;
+  document.getElementById('pass-' + key).classList.toggle('on', val === 'pass');
+  document.getElementById('fail-' + key).classList.toggle('on', val === 'fail');
 
-// Update pack badge
-const packKeys = ['pack','mask','reg'].map(t => packId + '_' + t);
-const allDone = packKeys.every(k => checkState[k]);
-const anyFail = packKeys.some(k => checkState[k] === 'fail');
-const badge = document.getElementById('chk-status-' + packId);
-if (badge) {
-if (!allDone) { badge.textContent = 'PENDING'; badge.className = 'badge badge-blue'; }
-else if (anyFail) { badge.textContent = 'FAIL'; badge.className = 'badge badge-red'; }
-else { badge.textContent = 'PASS'; badge.className = 'badge badge-green'; }
-}
+  // Update pack badge
+  const packKeys = ['pack','mask','reg'].map(t => packId + '_' + t);
+  const allDone  = packKeys.every(k => checkState[k]);
+  const anyFail  = packKeys.some(k => checkState[k] === 'fail');
+  const badge    = document.getElementById('chk-status-' + packId);
+  if (badge) {
+    if (!allDone) { badge.textContent = 'PENDING'; badge.className = 'badge badge-blue'; }
+    else if (anyFail) { badge.textContent = 'FAIL'; badge.className = 'badge badge-red'; }
+    else { badge.textContent = 'PASS'; badge.className = 'badge badge-green'; }
+  }
 
-// Enable submit if all visible packs checked
-const visiblePacks = DB.packs.filter(p => matchesFilter('truckcheck', p.Apparatus));
-const total = visiblePacks.length * 3;
-document.getElementById('submitBtn').disabled = Object.keys(checkState).length < total;
+  // Enable submit if all visible packs checked
+  const visiblePacks = DB.packs.filter(p => matchesFilter('truckcheck', p.Apparatus));
+  const total = visiblePacks.length * 3;
+  document.getElementById('submitBtn').disabled = Object.keys(checkState).length < total;
 }
 
 async function submitCheck() {
-const checker = document.getElementById('checkerName').value.trim();
-if (!checker) { toast('Enter your name before submitting.', 'err'); return; }
+  const checker = document.getElementById('checkerName').value.trim();
+  if (!checker) { toast('Enter your name before submitting.', 'err'); return; }
 
-const btn = document.getElementById('submitBtn');
-btn.disabled = true; btn.textContent = 'SUBMITTING...';
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'SUBMITTING...';
 
-const ts = new Date().toLocaleString('en-US',{
-year:'numeric', month:'2-digit', day:'2-digit',
-hour:'2-digit', minute:'2-digit', hour12: false
-});
+  const ts = new Date().toLocaleString('en-US',{
+    year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', hour12: false
+  });
 
-try {
-const visiblePacks = DB.packs.filter(p => matchesFilter('truckcheck', p.Apparatus));
-for (const p of visiblePacks) {
-const packStatus = checkState[p.PackID+'_pack'] === 'pass' ? 'PASS' : 'FAIL';
-const maskStatus = checkState[p.PackID+'_mask'] === 'pass' ? 'PASS' : 'FAIL';
-const regStatus = checkState[p.PackID+'_reg'] === 'pass' ? 'PASS' : 'FAIL';
-const notes = [
-packStatus==='FAIL'?'Pack FAIL':'',
-maskStatus==='FAIL'?'Mask FAIL':'',
-regStatus ==='FAIL'?'Reg FAIL':''
-].filter(Boolean).join('; ');
-await appendRow('CheckLog', [ts, p.Apparatus, checker, p.PackID, packStatus, maskStatus, regStatus, notes]);
-}
-toast('✓ Truck Check Submitted', 'ok');
-await loadAll();
-showSection('log', document.querySelectorAll('.nav-btn')[4]);
-} catch(e) {
-toast('Submit failed: ' + e.message, 'err');
-btn.disabled = false;
-btn.textContent = '▶ SUBMIT TRUCK CHECK';
-}
+  try {
+    const visiblePacks = DB.packs.filter(p => matchesFilter('truckcheck', p.Apparatus));
+    for (const p of visiblePacks) {
+      const packStatus = checkState[p.PackID+'_pack'] === 'pass' ? 'PASS' : 'FAIL';
+      const maskStatus = checkState[p.PackID+'_mask'] === 'pass' ? 'PASS' : 'FAIL';
+      const regStatus  = checkState[p.PackID+'_reg']  === 'pass' ? 'PASS' : 'FAIL';
+      const notes = [
+        packStatus==='FAIL'?'Pack FAIL':'',
+        maskStatus==='FAIL'?'Mask FAIL':'',
+        regStatus ==='FAIL'?'Reg FAIL':''
+      ].filter(Boolean).join('; ');
+      await appendRow('CheckLog', [ts, p.Apparatus, checker, p.PackID, packStatus, maskStatus, regStatus, notes]);
+
+      // Auto-log each failed item to RepairLog
+      if (packStatus === 'FAIL') await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Pack', p['PackSerial#'] || p.PackSerial || '', checker, 'OPEN', '']);
+      if (maskStatus === 'FAIL') {
+        const mask = DB.masks.find(m => m.PackID === p.PackID);
+        await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Mask', mask ? mask.MaskSerial : '', checker, 'OPEN', '']);
+      }
+      if (regStatus === 'FAIL') await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Regulator', p.RegSerial || '', checker, 'OPEN', '']);
+    }
+    toast('✓ Truck Check Submitted', 'ok');
+    await loadAll();
+    showSection('log', document.querySelectorAll('.nav-btn')[4]);
+  } catch(e) {
+    toast('Submit failed: ' + e.message, 'err');
+    btn.disabled = false;
+    btn.textContent = '▶ SUBMIT TRUCK CHECK';
+  }
 }
 
 // ── Log ────────────────────────────────────────────────────────────────────
 function renderLog() {
-const logs = [...DB.log]
-.filter(l => matchesFilter('log', l.Apparatus))
-.reverse();
-if (!logs.length) {
-document.getElementById('logBody').innerHTML = '<div class="loading">No check history yet.</div>';
-return;
+  const logs = [...DB.log]
+    .filter(l => matchesFilter('log', l.Apparatus))
+    .reverse();
+  if (!logs.length) {
+    document.getElementById('logBody').innerHTML = '<div class="loading">No check history yet.</div>';
+    return;
+  }
+  const html = logs.map(l => {
+    const allPass = l.PackStatus==='PASS' && l.MaskStatus==='PASS' && l.RegStatus==='PASS';
+    return `
+      <div class="log-row">
+        <div class="log-time">${l.Timestamp}</div>
+        <div class="log-pack">${l.PackID}</div>
+        <div style="flex:1;font-size:12px;color:var(--dim)">${l.Apparatus} · ${l.Checker}</div>
+        ${l.Notes ? `<div style="font-size:11px;color:var(--amber);margin-right:8px">${l.Notes}</div>` : ''}
+        <span class="badge ${allPass?'badge-green':'badge-red'}">${allPass?'PASS':'FAIL'}</span>
+      </div>`;
+  }).join('');
+  document.getElementById('logBody').innerHTML = html;
 }
-const html = logs.map(l => {
-const allPass = l.PackStatus==='PASS' && l.MaskStatus==='PASS' && l.RegStatus==='PASS';
-return `
-<div class="log-row">
-<div class="log-time">${l.Timestamp}</div>
-<div class="log-pack">${l.PackID}</div>
-<div style="flex:1;font-size:12px;color:var(--dim)">${l.Apparatus} · ${l.Checker}</div>
-${l.Notes ? `<div style="font-size:11px;color:var(--amber);margin-right:8px">${l.Notes}</div>` : ''}
-<span class="badge ${allPass?'badge-green':'badge-red'}">${allPass?'PASS':'FAIL'}</span>
-</div>`;
-}).join('');
-document.getElementById('logBody').innerHTML = html;
+
+// ── Repairs ────────────────────────────────────────────────────────────────
+function renderRepairs() {
+  const repairs = DB.repairs.filter(r => matchesFilter('repairs', r.Apparatus));
+  const open     = repairs.filter(r => r.Status === 'OPEN');
+  const resolved = repairs.filter(r => r.Status !== 'OPEN');
+
+  // Stats
+  document.getElementById('repairStatOpen').textContent = open.length;
+  document.getElementById('repairStatPack').textContent = open.filter(r => r.ItemType === 'Pack').length;
+  document.getElementById('repairStatMask').textContent = open.filter(r => r.ItemType === 'Mask').length;
+  document.getElementById('repairStatReg').textContent  = open.filter(r => r.ItemType === 'Regulator').length;
+  document.getElementById('repairOpenCount').textContent    = open.length + ' OPEN';
+  document.getElementById('repairResolvedCount').textContent = resolved.length + ' RESOLVED';
+
+  // Open items
+  if (!open.length) {
+    document.getElementById('repairsOpenBody').innerHTML = `
+      <div style="padding:32px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--green)">
+        ✓ No open repair items
+      </div>`;
+  } else {
+    document.getElementById('repairsOpenBody').innerHTML = open.map((r, i) => {
+      const globalIdx = DB.repairs.indexOf(r);
+      return `
+        <div class="repair-item">
+          <div class="repair-item-left">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="repair-pack-id">${r.PackID}</div>
+              <span class="repair-tag ${r.ItemType==='Pack'?'pack':r.ItemType==='Mask'?'mask':'reg'}">${r.ItemType}</span>
+            </div>
+            <div class="repair-apparatus">${r.Apparatus}</div>
+            <div class="repair-meta">Serial: ${r.Serial || '—'} · Flagged by ${r.Checker} · ${r.Timestamp}</div>
+            ${r.Notes ? `<div style="font-size:11px;color:var(--amber);margin-top:4px">${r.Notes}</div>` : ''}
+          </div>
+          <button class="resolve-btn" onclick="resolveItem(${globalIdx})">✓ RESOLVE</button>
+        </div>`;
+    }).join('');
+  }
+
+  // Resolved items
+  if (!resolved.length) {
+    document.getElementById('repairsResolvedBody').innerHTML = `
+      <div style="padding:20px 18px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted)">No resolved items yet.</div>`;
+  } else {
+    document.getElementById('repairsResolvedBody').innerHTML = [...resolved].reverse().map(r => `
+      <div class="resolved-item">
+        <div class="repair-pack-id">${r.PackID}</div>
+        <div style="flex:1">
+          <span class="repair-tag ${r.ItemType==='Pack'?'pack':r.ItemType==='Mask'?'mask':'reg'}" style="opacity:.6">${r.ItemType}</span>
+          <span style="font-size:12px;color:var(--dim);margin-left:8px">${r.Apparatus}</span>
+        </div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted)">${r.ResolvedAt || ''}</div>
+        <span class="badge badge-green" style="margin-left:10px">RESOLVED</span>
+      </div>`).join('');
+  }
+}
+
+async function resolveItem(rowIndex) {
+  // rowIndex is 0-based in DB.repairs; sheet row = rowIndex + 2 (1 header + 1-based)
+  const sheetRow = rowIndex + 2;
+  const ts = new Date().toLocaleString('en-US',{
+    year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', hour12: false
+  });
+
+  try {
+    // Update Status column (col G = 7) and ResolvedAt column (col H = 8)
+    const statusRange = `RepairLog!G${sheetRow}`;
+    const resolvedRange = `RepairLog!H${sheetRow}`;
+    await updateCell(statusRange, 'RESOLVED');
+    await updateCell(resolvedRange, ts);
+    toast('✓ Item marked resolved', 'ok');
+    await loadAll();
+  } catch(e) {
+    toast('Failed to resolve: ' + e.message, 'err');
+  }
+}
+
+async function updateCell(range, value) {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?valueInputOption=RAW&key=${API_KEY}`;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ range, majorDimension: 'ROWS', values: [[value]] })
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || res.statusText);
+  }
+  return res.json();
+}
+
+function updateRepairBadge() {
+  const open = DB.repairs.filter(r => r.Status === 'OPEN').length;
+  const btn = document.getElementById('repairNavBtn');
+  if (!btn) return;
+  if (open > 0) {
+    btn.textContent = `Repairs `;
+    const badge = document.createElement('span');
+    badge.style.cssText = 'background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px;';
+    badge.textContent = open;
+    btn.appendChild(badge);
+  } else {
+    btn.textContent = 'Repairs';
+  }
 }
 
 // ── Search helpers ─────────────────────────────────────────────────────────
 function clearSearch(inputId, clearId) {
-const input = document.getElementById(inputId);
-const btn = document.getElementById(clearId);
-if (input) input.value = '';
-if (btn) btn.classList.remove('visible');
+  const input = document.getElementById(inputId);
+  const btn   = document.getElementById(clearId);
+  if (input) input.value = '';
+  if (btn)   btn.classList.remove('visible');
 }
 
 // ── Nav ────────────────────────────────────────────────────────────────────
 function showSection(id, btn) {
-document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-if (btn) btn.classList.add('active');
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
 // ── Toast ──────────────────────────────────────────────────────────────────
 function toast(msg, type='ok') {
-const el = document.getElementById('toast');
-el.textContent = msg;
-el.className = 'toast ' + type;
-el.style.display = 'block';
-setTimeout(() => el.style.display = 'none', 3500);
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + type;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3500);
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
-if (API_KEY === 'PASTE_YOUR_API_KEY_HERE') {
-document.getElementById('registryBody').innerHTML = `
-<div style="padding:40px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--amber);line-height:2">
-⚠ API KEY NOT SET<br>
-<span style="color:var(--dim);font-size:11px">Open SCBA_App.html in a text editor<br>and replace PASTE_YOUR_API_KEY_HERE with your Google API key</span>
-</div>`;
-return;
-}
-['registry','masks','bottles','truckcheck','log'].forEach(s =>
-buildFilterBar(s+'Filter', s)
-);
-loadAll();
+  if (API_KEY === 'PASTE_YOUR_API_KEY_HERE') {
+    document.getElementById('registryBody').innerHTML = `
+      <div style="padding:40px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--amber);line-height:2">
+        ⚠ API KEY NOT SET<br>
+        <span style="color:var(--dim);font-size:11px">Open SCBA_App.html in a text editor<br>and replace PASTE_YOUR_API_KEY_HERE with your Google API key</span>
+      </div>`;
+    return;
+  }
+  ['registry','masks','bottles','truckcheck','log','repairs'].forEach(s =>
+    buildFilterBar(s+'Filter', s)
+  );
+  loadAll();
 });
 </script>
-
 </body>
 </html>
