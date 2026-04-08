@@ -930,10 +930,12 @@ function setCheck(packId, key, val) {
     else { badge.textContent = 'PASS'; badge.className = 'badge badge-green'; }
   }
 
-  // Enable submit if all visible packs checked
+  // Enable submit as long as at least one item has been checked
   const visiblePacks = DB.packs.filter(p => matchesFilter('truckcheck', p.Apparatus));
-  const total = visiblePacks.length * 3;
-  document.getElementById('submitBtn').disabled = Object.keys(checkState).length < total;
+  const anyChecked = visiblePacks.some(p =>
+    ['pack','mask','reg'].some(t => checkState[p.PackID+'_'+t])
+  );
+  document.getElementById('submitBtn').disabled = !anyChecked;
 }
 
 async function submitCheck() {
@@ -951,9 +953,16 @@ async function submitCheck() {
   try {
     const visiblePacks = DB.packs.filter(p => matchesFilter('truckcheck', p.Apparatus));
     for (const p of visiblePacks) {
-      const packStatus = checkState[p.PackID+'_pack'] === 'pass' ? 'PASS' : 'FAIL';
-      const maskStatus = checkState[p.PackID+'_mask'] === 'pass' ? 'PASS' : 'FAIL';
-      const regStatus  = checkState[p.PackID+'_reg']  === 'pass' ? 'PASS' : 'FAIL';
+      const packVal = checkState[p.PackID+'_pack'];
+      const maskVal = checkState[p.PackID+'_mask'];
+      const regVal  = checkState[p.PackID+'_reg'];
+
+      // Skip packs that haven't been touched at all
+      if (!packVal && !maskVal && !regVal) continue;
+
+      const packStatus = packVal === 'pass' ? 'PASS' : packVal === 'fail' ? 'FAIL' : 'NOT CHECKED';
+      const maskStatus = maskVal === 'pass' ? 'PASS' : maskVal === 'fail' ? 'FAIL' : 'NOT CHECKED';
+      const regStatus  = regVal  === 'pass' ? 'PASS' : regVal  === 'fail' ? 'FAIL' : 'NOT CHECKED';
 
       // Grab comments for failed items
       const packComment = packStatus === 'FAIL' ? (document.getElementById('commentText-'+p.PackID+'_pack')?.value.trim() || '') : '';
@@ -961,9 +970,12 @@ async function submitCheck() {
       const regComment  = regStatus  === 'FAIL' ? (document.getElementById('commentText-'+p.PackID+'_reg')?.value.trim()  || '') : '';
 
       const notesParts = [
-        packStatus==='FAIL' ? ('Pack FAIL' + (packComment ? ': ' + packComment : '')) : '',
-        maskStatus==='FAIL' ? ('Mask FAIL' + (maskComment ? ': ' + maskComment : '')) : '',
-        regStatus ==='FAIL' ? ('Reg FAIL'  + (regComment  ? ': ' + regComment  : '')) : '',
+        packStatus==='FAIL'     ? ('Pack FAIL'        + (packComment ? ': ' + packComment : '')) : '',
+        maskStatus==='FAIL'     ? ('Mask FAIL'        + (maskComment ? ': ' + maskComment : '')) : '',
+        regStatus ==='FAIL'     ? ('Reg FAIL'         + (regComment  ? ': ' + regComment  : '')) : '',
+        packStatus==='NOT CHECKED' ? 'Pack not checked' : '',
+        maskStatus==='NOT CHECKED' ? 'Mask not checked' : '',
+        regStatus ==='NOT CHECKED' ? 'Reg not checked'  : '',
       ].filter(Boolean);
       const notes = notesParts.join('; ');
 
@@ -975,7 +987,7 @@ async function submitCheck() {
         const mask = DB.masks.find(m => m.PackID === p.PackID);
         await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Mask',      mask ? mask.MaskSerial : '', checker, 'OPEN', maskComment]);
       }
-      if (regStatus  === 'FAIL') await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Regulator', p.RegSerial || '',                     checker, 'OPEN', regComment]);
+      if (regStatus  === 'FAIL') await appendRow('RepairLog', [ts, p.Apparatus, p.PackID, 'Regulator', p.RegSerial || '', checker, 'OPEN', regComment]);
     }
     toast('✓ Truck Check Submitted', 'ok');
     await loadAll();
