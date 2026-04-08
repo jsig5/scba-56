@@ -415,6 +415,14 @@ body.light .detail-drawer { background: #f8f9fd; }
 .search-count{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);white-space:nowrap;}
 .highlight{background:rgba(204,31,31,.3);color:var(--text);border-radius:2px;padding:0 1px;}
 
+/* ── FIELD LABEL ── */
+.field-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--dim);
+  text-transform: uppercase; letter-spacing: 1px;
+  display: block; margin-bottom: 6px;
+}
+
 /* ── LOADING ── */
 .loading {
   display: flex; align-items: center; justify-content: center;
@@ -506,6 +514,7 @@ body.light .detail-drawer { background: #f8f9fd; }
     <button class="nav-btn" onclick="showSection('truckcheck',this)">Truck Check</button>
     <button class="nav-btn" onclick="showSection('log',this)">Log</button>
     <button class="nav-btn" id="repairNavBtn" onclick="showSection('repairs',this)">Repairs</button>
+    <button class="nav-btn" onclick="showSection('report',this)">Report</button>
   </nav>
 </div>
 
@@ -610,6 +619,48 @@ body.light .detail-drawer { background: #f8f9fd; }
     </div>
     <div id="repairsResolvedBody"></div>
   </div>
+</div>
+
+<!-- ── REPORT ── -->
+<div id="report" class="section">
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-head">
+      <div class="card-title">Generate Report</div>
+    </div>
+    <div style="padding:20px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end">
+      <div>
+        <label class="field-label">Report Type</label>
+        <select id="reportType" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:5px;font-family:'Barlow',sans-serif;font-size:13px;outline:none">
+          <option value="daily">Daily Truck Check Report</option>
+          <option value="weekly">Weekly Summary</option>
+          <option value="repairs">Open Repairs Report</option>
+          <option value="inventory">Full Inventory Report</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label">Apparatus</label>
+        <select id="reportApparatus" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:5px;font-family:'Barlow',sans-serif;font-size:13px;outline:none">
+          <option value="all">All Units</option>
+          <option value="Squad 56">Squad 56</option>
+          <option value="Engine 56">Engine 56</option>
+          <option value="Rescue 56">Rescue 56</option>
+          <option value="Spec Ops 56">Spec Ops 56</option>
+          <option value="Utility 56">Utility 56</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label">Date Range</label>
+        <select id="reportRange" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:5px;font-family:'Barlow',sans-serif;font-size:13px;outline:none">
+          <option value="today">Today</option>
+          <option value="week">Last 7 Days</option>
+          <option value="month">Last 30 Days</option>
+          <option value="all">All Time</option>
+        </select>
+      </div>
+      <button class="submit-check" style="width:auto;padding:10px 28px;margin:0;font-size:15px" onclick="generateReport()">⬇ GENERATE PDF</button>
+    </div>
+  </div>
+  <div id="reportPreview"></div>
 </div>
 
 </div><!-- /main -->
@@ -1289,6 +1340,215 @@ async function addRepairNote(rowIndex) {
   } catch(e) {
     toast('Failed to add note: ' + e.message, 'err');
   }
+}
+
+// ── PDF Report Export ──────────────────────────────────────────────────────
+function generateReport() {
+  const type       = document.getElementById('reportType').value;
+  const apparatus  = document.getElementById('reportApparatus').value;
+  const range      = document.getElementById('reportRange').value;
+  const now        = new Date();
+  const preview    = document.getElementById('reportPreview');
+
+  // Date filter
+  let cutoff = new Date(0);
+  if (range === 'today') { cutoff = new Date(now); cutoff.setHours(0,0,0,0); }
+  if (range === 'week')  { cutoff = new Date(now - 7 * 86400000); }
+  if (range === 'month') { cutoff = new Date(now - 30 * 86400000); }
+
+  const appFilter = l => apparatus === 'all' || l.Apparatus === apparatus;
+  const dateFilter = l => new Date(l.Timestamp) >= cutoff;
+
+  let bodyHTML = '';
+  let title = '';
+
+  if (type === 'daily' || type === 'weekly') {
+    title = type === 'daily' ? 'Truck Check Report' : 'Weekly Summary';
+    const logs = DB.log.filter(appFilter).filter(dateFilter);
+    const fails = logs.filter(l => l.PackStatus==='FAIL'||l.MaskStatus==='FAIL'||l.RegStatus==='FAIL');
+    bodyHTML = `
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+        <div style="background:#f8f9ff;border:1px solid #dde;border-radius:6px;padding:14px;text-align:center">
+          <div style="font-size:28px;font-weight:800;color:#0f1628">${logs.length}</div>
+          <div style="font-size:10px;color:#666;font-family:monospace;margin-top:2px">CHECKS LOGGED</div>
+        </div>
+        <div style="background:#f8fff8;border:1px solid #cec;border-radius:6px;padding:14px;text-align:center">
+          <div style="font-size:28px;font-weight:800;color:#1a7a1a">${logs.length - fails.length}</div>
+          <div style="font-size:10px;color:#666;font-family:monospace;margin-top:2px">ALL PASS</div>
+        </div>
+        <div style="background:#fff8f8;border:1px solid #ecc;border-radius:6px;padding:14px;text-align:center">
+          <div style="font-size:28px;font-weight:800;color:#cc0000">${fails.length}</div>
+          <div style="font-size:10px;color:#666;font-family:monospace;margin-top:2px">FAILURES</div>
+        </div>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead>
+          <tr style="background:#0f1628;color:#fff">
+            <th style="padding:8px 10px;text-align:left">Time</th>
+            <th style="padding:8px 10px;text-align:left">Pack</th>
+            <th style="padding:8px 10px;text-align:left">Apparatus</th>
+            <th style="padding:8px 10px;text-align:left">Checker</th>
+            <th style="padding:8px 10px;text-align:center">Pack</th>
+            <th style="padding:8px 10px;text-align:center">Mask</th>
+            <th style="padding:8px 10px;text-align:center">Reg</th>
+            <th style="padding:8px 10px;text-align:left">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${[...logs].reverse().map((l,i) => {
+            const fail = l.PackStatus==='FAIL'||l.MaskStatus==='FAIL'||l.RegStatus==='FAIL';
+            const bg = fail ? '#fff5f5' : i%2===0 ? '#fff' : '#f9f9fb';
+            const statusCell = s => `<td style="padding:6px 10px;text-align:center;color:${s==='PASS'?'#1a7a1a':s==='FAIL'?'#cc0000':'#999'};font-weight:700">${s}</td>`;
+            return `<tr style="background:${bg};border-bottom:1px solid #eee">
+              <td style="padding:6px 10px;font-family:monospace;font-size:11px">${l.Timestamp}</td>
+              <td style="padding:6px 10px;font-weight:700;color:#cc1f1f">${l.PackID}</td>
+              <td style="padding:6px 10px">${l.Apparatus}</td>
+              <td style="padding:6px 10px">${l.Checker}</td>
+              ${statusCell(l.PackStatus)}
+              ${statusCell(l.MaskStatus)}
+              ${statusCell(l.RegStatus)}
+              <td style="padding:6px 10px;font-size:11px;color:#cc6600">${l.Notes||''}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  if (type === 'repairs') {
+    title = 'Open Repairs Report';
+    const open = DB.repairs.filter(r => r.Status === 'OPEN').filter(appFilter);
+    bodyHTML = open.length ? `
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead>
+          <tr style="background:#0f1628;color:#fff">
+            <th style="padding:8px 10px;text-align:left">Pack</th>
+            <th style="padding:8px 10px;text-align:left">Item</th>
+            <th style="padding:8px 10px;text-align:left">Apparatus</th>
+            <th style="padding:8px 10px;text-align:left">Serial</th>
+            <th style="padding:8px 10px;text-align:left">Flagged By</th>
+            <th style="padding:8px 10px;text-align:left">Date</th>
+            <th style="padding:8px 10px;text-align:left">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${open.map((r,i) => `
+            <tr style="background:${i%2===0?'#fff':'#f9f9fb'};border-bottom:1px solid #eee">
+              <td style="padding:6px 10px;font-weight:700;color:#cc1f1f">${r.PackID}</td>
+              <td style="padding:6px 10px;font-weight:700">${r.ItemType}</td>
+              <td style="padding:6px 10px">${r.Apparatus}</td>
+              <td style="padding:6px 10px;font-family:monospace;font-size:11px">${r.Serial||'—'}</td>
+              <td style="padding:6px 10px">${r.Checker}</td>
+              <td style="padding:6px 10px;font-family:monospace;font-size:11px">${r.Timestamp}</td>
+              <td style="padding:6px 10px;font-size:11px;color:#cc6600">${r.Notes||''}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>` : '<p style="color:#666;font-style:italic">No open repair items.</p>';
+  }
+
+  if (type === 'inventory') {
+    title = 'Full Inventory Report';
+    bodyHTML = `
+      <h3 style="font-size:13px;font-family:monospace;text-transform:uppercase;color:#666;margin:16px 0 8px">Packs (${DB.packs.filter(appFilter).length})</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px">
+        <thead><tr style="background:#0f1628;color:#fff">
+          <th style="padding:8px 10px;text-align:left">Pack ID</th>
+          <th style="padding:8px 10px;text-align:left">Apparatus</th>
+          <th style="padding:8px 10px;text-align:left">Pack Serial</th>
+          <th style="padding:8px 10px;text-align:left">Reg Serial</th>
+          <th style="padding:8px 10px;text-align:left">Mfg Date</th>
+          <th style="padding:8px 10px;text-align:left">Status</th>
+        </tr></thead>
+        <tbody>${DB.packs.filter(appFilter).map((p,i)=>`
+          <tr style="background:${i%2===0?'#fff':'#f9f9fb'};border-bottom:1px solid #eee">
+            <td style="padding:6px 10px;font-weight:700;color:#cc1f1f">${p.PackID}</td>
+            <td style="padding:6px 10px">${p.Apparatus}</td>
+            <td style="padding:6px 10px;font-family:monospace;font-size:11px">${p['PackSerial#']||''}</td>
+            <td style="padding:6px 10px;font-family:monospace;font-size:11px">${p.RegSerial||''}</td>
+            <td style="padding:6px 10px;font-family:monospace;font-size:11px">${p.MfgDate||''}</td>
+            <td style="padding:6px 10px;color:${p.Status==='IN SERVICE'?'#1a7a1a':'#cc0000'};font-weight:700">${p.Status}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <h3 style="font-size:13px;font-family:monospace;text-transform:uppercase;color:#666;margin:16px 0 8px">Masks (${DB.masks.length})</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="background:#0f1628;color:#fff">
+          <th style="padding:8px 10px;text-align:left">Serial</th>
+          <th style="padding:8px 10px;text-align:left">Assigned To</th>
+          <th style="padding:8px 10px;text-align:left">Size</th>
+          <th style="padding:8px 10px;text-align:left">Pack</th>
+          <th style="padding:8px 10px;text-align:left">Fit Test Due</th>
+          <th style="padding:8px 10px;text-align:left">Status</th>
+        </tr></thead>
+        <tbody>${DB.masks.map((m,i)=>`
+          <tr style="background:${i%2===0?'#fff':'#f9f9fb'};border-bottom:1px solid #eee">
+            <td style="padding:6px 10px;font-family:monospace;font-size:11px">${m.MaskSerial}</td>
+            <td style="padding:6px 10px">${m['Assigned to']||'—'}</td>
+            <td style="padding:6px 10px">${m.Size}</td>
+            <td style="padding:6px 10px;font-weight:700;color:#cc1f1f">${m.PackID}</td>
+            <td style="padding:6px 10px;font-family:monospace;font-size:11px">${m.FitTestDue||'—'}</td>
+            <td style="padding:6px 10px;color:${m.Status==='OK'?'#1a7a1a':'#cc6600'};font-weight:700">${m.Status}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  // Build full printable HTML and open print dialog
+  const reportDate = now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const reportHTML = `
+    <!DOCTYPE html><html><head>
+    <meta charset="UTF-8">
+    <title>Manoa Fire — ${title}</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; padding: 24px; color: #0f1628; }
+      .report-header { display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:3px solid #cc1f1f; margin-bottom:20px; }
+      .report-title { font-size:22px; font-weight:800; text-transform:uppercase; letter-spacing:2px; }
+      .report-sub { font-size:12px; color:#666; margin-top:3px; font-family:monospace; }
+      .report-logo { font-size:18px; font-weight:800; letter-spacing:2px; color:#cc1f1f; }
+      .report-footer { margin-top:24px; padding-top:10px; border-top:1px solid #ddd; font-size:10px; color:#999; font-family:monospace; text-align:center; }
+      @media print { body { padding: 16px; } }
+    </style>
+    </head><body>
+    <div class="report-header">
+      <div>
+        <div class="report-title">${title}</div>
+        <div class="report-sub">${apparatus === 'all' ? 'All Units' : apparatus} · ${reportDate} · Range: ${range}</div>
+      </div>
+      <div class="report-logo">MANOA FIRE // S56</div>
+    </div>
+    ${bodyHTML}
+    <div class="report-footer">Generated ${now.toLocaleString()} · Manoa Fire Company SCBA Accountability System</div>
+    </body></html>`;
+
+  // Show preview card
+  preview.innerHTML = `
+    <div class="card">
+      <div class="card-head" style="justify-content:space-between">
+        <div class="card-title">Preview — ${title}</div>
+        <button class="submit-check" style="width:auto;padding:8px 20px;margin:0;font-size:13px" onclick="printReport()">🖨 PRINT / SAVE PDF</button>
+      </div>
+      <div style="padding:20px;overflow-x:auto">
+        <iframe id="reportFrame" style="width:100%;min-height:500px;border:none;background:#fff;border-radius:4px"></iframe>
+      </div>
+    </div>`;
+
+  // Write to iframe
+  const frame = document.getElementById('reportFrame');
+  frame.onload = () => {};
+  const doc = frame.contentDocument || frame.contentWindow.document;
+  doc.open(); doc.write(reportHTML); doc.close();
+
+  // Store for printing
+  window._reportHTML = reportHTML;
+  toast('✓ Report generated', 'ok');
+}
+
+function printReport() {
+  if (!window._reportHTML) return;
+  const win = window.open('', '_blank');
+  win.document.write(window._reportHTML);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 500);
 }
 
 // ── Search helpers ─────────────────────────────────────────────────────────
