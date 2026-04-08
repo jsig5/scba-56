@@ -526,10 +526,8 @@ tbody td {
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CONFIG — paste your values here once, then share the file ─────────────
-const API_KEY  = 'AIzaSyCvMTI3fKnnY_SEanKOV06a_RDOx5jkqRk';
-const SHEET_ID = '11joexsJGkijm9r_p-tGI3OOu7W_Lb-ymeYi2HSKOsh4';
-const WRITE_URL = 'https://script.google.com/macros/s/AKfycbwEhofekW6rlf2GdFyElrM_DLARcJPDytQflyPCSre5f4owfoPb8TBf0-A1pvUO0DSU6w/exec';
+// ── CONFIG ─────────────────────────────────────────────────────────────────
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwEhofekW6rlf2GdFyElrM_DLARcJPDytQflyPCSre5f4owfoPb8TBf0-A1pvUO0DSU6w/exec';
 
 // ── State ──────────────────────────────────────────────────────────────────
 let DB = { packs:[], masks:[], bottles:[], members:[], log:[], repairs:[] };
@@ -562,7 +560,6 @@ function setFilter(section, value) {
   if (section === 'repairs')    renderRepairs();
 }
 
-// helper: does an apparatus string match the active filter?
 function matchesFilter(section, apparatusStr) {
   const f = filters[section];
   if (!f) return true;
@@ -571,59 +568,45 @@ function matchesFilter(section, apparatusStr) {
 
 // ── Init ───────────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
-  if (API_KEY === 'PASTE_YOUR_API_KEY_HERE') {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById('registry').classList.add('active');
-    document.getElementById('registryBody').innerHTML = `
-      <div style="padding:40px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--amber);line-height:2">
-        ⚠ API KEY NOT SET<br>
-        <span style="color:var(--dim);font-size:11px">Open SCBA_App.html in a text editor<br>and replace PASTE_YOUR_API_KEY_HERE with your Google API key</span>
-      </div>`;
-    return;
-  }
-  ['registry','masks','bottles','truckcheck','log'].forEach(s =>
+  ['registry','masks','bottles','truckcheck','log','repairs'].forEach(s =>
     buildFilterBar(s+'Filter', s)
   );
   loadAll();
 });
 
-// ── Google Sheets API ──────────────────────────────────────────────────────
+// ── Sheet API — all reads & writes via Apps Script ─────────────────────────
 async function fetchTab(tab) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(tab)}?key=${API_KEY}`;
+  const url = `${SCRIPT_URL}?tab=${encodeURIComponent(tab)}`;
   const res = await fetch(url);
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error?.message || res.statusText);
-  }
+  if (!res.ok) throw new Error('Fetch failed: ' + res.status);
   const data = await res.json();
-  const rows = data.values || [];
+  if (data.status === 'error') throw new Error(data.message);
+  const rows = data.data || [];
   if (rows.length < 2) return [];
   const headers = rows[0];
   return rows.slice(1).map(r => {
     const obj = {};
-    headers.forEach((h,i) => obj[h] = r[i] || '');
+    headers.forEach((h, i) => obj[h] = r[i] !== undefined ? String(r[i]) : '');
     return obj;
   });
 }
 
 async function appendRow(tab, values) {
-  const res = await fetch(WRITE_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'append', tab, values })
-  });
-  if (!res.ok) throw new Error('Write failed: ' + res.status);
-  return res.json();
+  const params = new URLSearchParams();
+  params.append('action', 'append');
+  params.append('tab', tab);
+  params.append('values', JSON.stringify(values));
+  await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: params });
+  // no-cors returns opaque response — we assume success and reload to confirm
 }
 
 async function updateCell(range, value) {
-  const res = await fetch(WRITE_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'updateCell', tab: range.split('!')[0], range, value })
-  });
-  if (!res.ok) throw new Error('Update failed: ' + res.status);
-  return res.json();
+  const params = new URLSearchParams();
+  params.append('action', 'updateCell');
+  params.append('tab', range.split('!')[0]);
+  params.append('range', range);
+  params.append('value', value);
+  await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: params });
 }
 
 // ── Load All ───────────────────────────────────────────────────────────────
