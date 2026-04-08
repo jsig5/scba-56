@@ -37,51 +37,62 @@ body {
 .header {
   background: var(--surface);
   border-bottom: 2px solid var(--accent);
-  padding: 0 24px;
-  display: flex; align-items: center;
-  gap: 0; height: 56px;
   position: sticky; top: 0; z-index: 100;
+}
+.header-top {
+  padding: 0 16px;
+  display: flex; align-items: center;
+  height: 48px; gap: 12px;
 }
 .logo {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 22px; font-weight: 800;
+  font-size: 20px; font-weight: 800;
   letter-spacing: 3px; text-transform: uppercase;
-  color: var(--text);
-  margin-right: 32px;
+  color: var(--text); flex: 1;
 }
 .logo span { color: var(--accent); }
-.nav { display: flex; height: 100%; gap: 0; }
-.nav-btn {
-  background: none; border: none;
-  color: var(--dim);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px; font-weight: 600;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  padding: 0 18px; cursor: pointer;
-  border-bottom: 3px solid transparent;
-  border-top: 3px solid transparent;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.nav-btn:hover { color: var(--text); }
-.nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 .header-right {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 10px;
 }
 .sync-btn {
   background: none; border: 1px solid var(--border);
-  color: var(--dim); padding: 6px 14px;
+  color: var(--dim); padding: 5px 10px;
   border-radius: 4px; cursor: pointer;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 11px; letter-spacing: 1px;
-  transition: all 0.2s;
+  font-size: 10px; letter-spacing: 1px;
+  transition: all 0.2s; white-space: nowrap;
 }
 .sync-btn:hover { border-color: var(--accent); color: var(--accent); }
 #syncStatus {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 11px; color: var(--muted);
+  font-size: 10px; color: var(--muted);
+  white-space: nowrap;
 }
+.nav {
+  display: flex; height: 44px;
+  overflow-x: auto; overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  border-top: 1px solid var(--border);
+  padding: 0 8px;
+  gap: 0;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav-btn {
+  background: none; border: none;
+  color: var(--dim);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 0 14px; cursor: pointer;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid transparent;
+  transition: all 0.15s;
+  white-space: nowrap; flex-shrink: 0;
+  height: 44px;
+}
+.nav-btn:hover { color: var(--text); }
+.nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
 /* ── MAIN ── */
 .main { padding: 24px; max-width: 1100px; }
@@ -394,9 +405,10 @@ tbody td {
 @media (max-width: 640px) {
   .stat-bar { grid-template-columns: repeat(2,1fr); }
   .detail-drawer.open { grid-template-columns: 1fr; }
-  .nav-btn { padding: 0 10px; font-size: 12px; }
-  .logo { font-size: 17px; margin-right: 12px; }
+  .main { padding: 16px; }
   .appr-btn { font-size: 12px; padding: 6px 10px; }
+  tbody td { padding: 9px 10px; font-size: 12px; }
+  thead th { padding: 8px 10px; }
 }
 </style>
 </head>
@@ -404,7 +416,13 @@ tbody td {
 
 <!-- ── HEADER ── -->
 <div class="header">
-  <div class="logo">MANOA <span>//</span> SCBA</div>
+  <div class="header-top">
+    <div class="logo">MANOA <span>//</span> SCBA</div>
+    <div class="header-right">
+      <span id="syncStatus">—</span>
+      <button class="sync-btn" onclick="loadAll()">↻ SYNC</button>
+    </div>
+  </div>
   <nav class="nav">
     <button class="nav-btn active" onclick="showSection('registry',this)">Registry</button>
     <button class="nav-btn" onclick="showSection('masks',this)">Masks</button>
@@ -413,10 +431,6 @@ tbody td {
     <button class="nav-btn" onclick="showSection('log',this)">Log</button>
     <button class="nav-btn" id="repairNavBtn" onclick="showSection('repairs',this)">Repairs</button>
   </nav>
-  <div class="header-right">
-    <span id="syncStatus">—</span>
-    <button class="sync-btn" onclick="loadAll()">↻ SYNC</button>
-  </div>
 </div>
 
 <div class="main">
