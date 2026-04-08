@@ -607,16 +607,22 @@ async function fetchTab(tab) {
 }
 
 async function appendRow(tab, values) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(tab)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS&key=${API_KEY}`;
-  const res = await fetch(url, {
+  const res = await fetch(WRITE_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ values: [values] })
+    body: JSON.stringify({ action: 'append', tab, values })
   });
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error?.message || res.statusText);
-  }
+  if (!res.ok) throw new Error('Write failed: ' + res.status);
+  return res.json();
+}
+
+async function updateCell(range, value) {
+  const res = await fetch(WRITE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'updateCell', tab: range.split('!')[0], range, value })
+  });
+  if (!res.ok) throw new Error('Update failed: ' + res.status);
   return res.json();
 }
 
@@ -1101,19 +1107,6 @@ async function resolveItem(rowIndex) {
   }
 }
 
-async function updateCell(range, value) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?valueInputOption=RAW&key=${API_KEY}`;
-  const res = await fetch(url, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ range, majorDimension: 'ROWS', values: [[value]] })
-  });
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error?.message || res.statusText);
-  }
-  return res.json();
-}
 
 function updateRepairBadge() {
   const open = DB.repairs.filter(r => r.Status === 'OPEN').length;
